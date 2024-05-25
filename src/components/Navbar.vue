@@ -1,7 +1,8 @@
 <template>
   <fwb-navbar>
     <template #logo>
-      <div class="text-xl">Pet Shop</div>
+      <fwb-navbar-logo alt="Flowbite logo" image-url="/src/assets/2.jpg" link="#">Pet Shop
+      </fwb-navbar-logo>
     </template>
     <template #default="{isShowMenu}">
       <fwb-navbar-collapse :is-show-menu="isShowMenu">
@@ -9,7 +10,7 @@
           Home
         </fwb-navbar-link>
         <fwb-navbar-link link="#">
-          Services
+          Layanan
         </fwb-navbar-link>
         <fwb-navbar-link link="/login">
           Login
@@ -27,5 +28,6 @@ import {
   FwbNavbar,
   FwbNavbarCollapse,
   FwbNavbarLink,
+  FwbNavbarLogo,
 } from 'flowbite-vue'
 </script>
