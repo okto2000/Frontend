@@ -1,5 +1,9 @@
 <script setup>
 import Polygon from '@/components/icons/Polygon.vue'
+import IconChat from '@/components/icons/IconChat.vue'
+import IconCheckbox from '@/components/icons/IconCheckbox.vue'
+import IconShielcheck from '@/components/icons/IconShieldcheck.vue'
+import IconTag from '@/components/icons/IconTag.vue'
 import { FwbButton } from 'flowbite-vue'
 </script>
 <template>
@@ -19,6 +23,36 @@ import { FwbButton } from 'flowbite-vue'
     </div>
     <div>
       <Polygon/>
+    </div>
+    <div class="flex justify-center w-full">
+      <div class="flex lg:mx-8">
+        <IconChat/>
+        <div class="flex-col mx-4">
+          <h1 class="font-semibold lg:text-lg">KONSULTASI GRATIS</h1>
+          <p>Dapatkan Konsultasi Kesehatan Gratis di Petshop Kami!</p>
+        </div>
+      </div>
+      <div class="flex lg:mx-4">
+        <IconCheckbox/>
+        <div class="flex-col mx-4">
+          <h1 class="font-semibold lg:text-lg">JAMINAN KUALITAS</h1>
+          <p>Kualitas Layanan Terjamin di Petshop Kami!</p>
+        </div>
+      </div>
+      <div class="flex lg:mx-4">
+        <IconTag/>
+        <div class="flex-col mx-4">
+          <h1 class="font-semibold lg:text-lg">PROMO SPESIAL</h1>
+          <p>Nikmati Promo Spesial Bagi Pelanggan Setia di Petshop Kami!</p>
+        </div>
+      </div>
+      <div class="flex lg:mx-4">
+        <IconShielcheck/>
+        <div class="flex-col mx-4">
+          <h1 class="font-semibold lg:text-lg">PEMBAYARAN 100% AMAN</h1>
+          <p>Pembayaran 100% Aman di Petshop Kami!</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

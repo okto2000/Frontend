@@ -6,8 +6,8 @@
   import { FwbCarousel } from 'flowbite-vue'
   
   const pictures = [
-    {src: 'src/assets/3.jpg', alt: 'Image 1'},
-    {src: 'src/assets/banner1.jpg', alt: 'Image 2'},
-    {src: 'src/assets/banner3.jpg', alt: 'Image 3'},
+    {src: 'src/assets/image.png', alt: 'Image 1'},
+    {src: 'src/assets/image1.png', alt: 'Image 2'},
+    {src: 'src/assets/banner2.jpeg', alt: 'Image 3'},
   ]
   </script>
