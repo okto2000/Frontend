@@ -13,7 +13,7 @@
         </div>
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-center">
           <div class="flex flex-shrink-0 items-center">
-            <img class="h-8 w-auto" src="/src/assets/2.jpg" alt="Your Company" />
+          <img class="h-8 w-auto" src="/src/assets/img/logo.jpg" alt="Your Company" />
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
@@ -40,7 +40,7 @@ import Bars3Icon from '@/components/icons/Bar3.vue'
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Login', href: '/login'},
-  { name: 'Projects', href: '#' },
-  { name: 'Calendar', href: '#'},
+  { name: 'Register', href: '/register' },
+  { name: 'Data Hewan', href: '#'},
 ]
 </script>
