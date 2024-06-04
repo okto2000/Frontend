@@ -105,7 +105,7 @@
           </li>
           <li class="items-center">
             <router-link
-              to="#"
+              to="/admin/pesanan"
               v-slot="{ href, navigate, isActive }"
             >
               <a
@@ -142,7 +142,7 @@
         <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
           <li class="items-center">
             <router-link
-              to="#"
+              to="/admin/pelanggan"
               v-slot="{ href, navigate, isActive }"
             >
               <a
@@ -159,14 +159,14 @@
                   class="fas fa-tools mr-2 text-sm"
                   :class="[isActive ? 'opacity-75' : 'text-blueGray-300']"
                 ></i>
-                Customer
+                Pelanggan
               </a>
             </router-link>
           </li>
 
           <li class="items-center">
             <router-link
-              to="#"
+              to="/admin/karyawan"
               v-slot="{ href, navigate, isActive }"
             >
               <a
@@ -188,7 +188,7 @@
             </router-link>
           </li>
           <li class="items-center">
-            <router-link to="#" v-slot="{ href, navigate, isActive }">
+            <router-link to="/admin/admin" v-slot="{ href, navigate, isActive }">
               <a
                 :href="href"
                 @click="navigate"

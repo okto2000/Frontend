@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="nav" class="bg-transaparent" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-transaparent z-50" v-slot="{ open }">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between bg-gradient-to-t from-transparent to-cyan-200 rounded-bl-full rounded-br-full">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden ">
@@ -41,6 +41,6 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Login', href: '/login'},
   { name: 'Register', href: '/register' },
-  { name: 'Data Hewan', href: '#'},
+  { name: 'Riwayat Pesanan', href: '/riwayat-pesanan'},
 ]
 </script>

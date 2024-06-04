@@ -16,7 +16,6 @@
     <div class="bg-white">
       <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 class="text-2xl font-bold tracking-tight text-gray-900">Layanan</h2>
-  
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           <div v-for="product in products" :key="product.id" class="group relative">
             <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
@@ -56,9 +55,14 @@
               imageSrc: 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//106/MTA-86138476/oem_oem_one-c566_kalung_kucing_lonceng_motif_jejak_kucing_cat_paw_-_kalung_lonceng_kucing_kitten_aksesoris_hewan_peliharaan_full02_juu7rv3a.jpg',
               imageAlt: "Front of men's Basic Tee in black.",
               price: '$35',
-              tipe:"Pelayanan",
+              tipe:index%2==0?"Pelayanan":"Barang",
           })
       }
-  }
+  },
+    methods: {
+      slicedProducts() {
+          return this.products.slice(product => product.tipe === "Pelayanan");
+      }
+    }
 }
   </script>
