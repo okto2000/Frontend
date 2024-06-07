@@ -75,7 +75,7 @@ export default {
           }
   },
   created() {
-      for (let index = 0; index < 2; index++) {
+      for (let index = 0; index < 8; index++) {
           this.products.push({
               id: index,
               name: "Produk " + index,
