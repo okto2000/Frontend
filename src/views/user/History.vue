@@ -55,7 +55,7 @@
               id: index,
               name: "Produk " + index,
               imageSrc: 'gambar ' + index,
-              price: '$35',
+              price: 'Rp.35',
               tipe:index%2==0?"Pelayanan":"Barang",
           })
       }

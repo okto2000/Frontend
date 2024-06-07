@@ -10,7 +10,8 @@ import Admin from '@/views/admin/Admin.vue'
 import Pesanan from '@/views/admin/Pesanan.vue'
 import Karyawan from '@/views/admin/Karyawan.vue'
 import Pelanggan from '@/views/admin/Pelanggan.vue'
-import History from '@/views/History.vue'
+import History from '@/views/user/History.vue'
+import ShoppingCart from '@/views/user/ShoppingCart.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
         path: '/',
         name: 'home',
         component: HomeView
+      },
+        {     
+        path: '/shoppingcart',
+        name: 'shopping cart',
+        component: ShoppingCart
       },
       {
         path: '/login',

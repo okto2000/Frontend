@@ -41,6 +41,5 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Login', href: '/login'},
   { name: 'Register', href: '/register' },
-  { name: 'Riwayat Pesanan', href: '/riwayat-pesanan'},
 ]
 </script>
