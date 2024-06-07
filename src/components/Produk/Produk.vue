@@ -54,7 +54,7 @@
               href: '#',
               imageSrc: 'src/assets/img/pngwing.com (3).png',
               imageAlt: "Front of men's Basic Tee in black.",
-              price: '$35',
+              price: 'Rp.35',
               tipe:index%2==0?"Pelayanan":"Barang",
           })
       }
