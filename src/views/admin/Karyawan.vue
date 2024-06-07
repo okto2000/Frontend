@@ -76,7 +76,7 @@
                   name: "karyawan " + index,
                   alamat: 'alamat ' + index,
                   notlp: '08123' + index,
-                  gaji: 'Rp.35',
+                  gaji: '$35',
               })
           }
       },
