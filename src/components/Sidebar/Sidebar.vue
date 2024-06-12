@@ -9,7 +9,7 @@
       <button
         class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
         type="button"
-        v-on:click="toggleCollapseShow('bg-white m-2 py-3 px-6')"
+        @:click="toggleCollapseShow('bg-white m-2 py-3 px-6')"
       >
         <i class="fas fa-bars"></i>
       </button>
@@ -26,7 +26,7 @@
           <notification-dropdown />
         </li>
         <li class="inline-block relative">
-          <user-dropdown />
+          <AdminDropdown />
         </li>
       </ul>
       <!-- Collapse -->
@@ -51,7 +51,7 @@
               <button
                 type="button"
                 class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-                v-on:click="toggleCollapseShow('hidden')"
+                @:click="toggleCollapseShow('hidden')"
               >
                 <i class="fas fa-times"></i>
               </button>
@@ -126,7 +126,6 @@
               </a>
             </router-link>
           </li>
-
         </ul>
 
         <!-- Divider -->
@@ -188,7 +187,10 @@
             </router-link>
           </li>
           <li class="items-center">
-            <router-link to="/admin/admin" v-slot="{ href, navigate, isActive }">
+            <router-link
+              to="/admin/admin"
+              v-slot="{ href, navigate, isActive }"
+            >
               <a
                 :href="href"
                 @click="navigate"
@@ -214,7 +216,6 @@
         <!-- Heading -->
         <!-- Navigation -->
 
-
         <!-- Divider -->
         <!-- Heading -->
       </div>
@@ -225,7 +226,7 @@
 
 <script>
 import NotificationDropdown from "@/components/Dropdowns/NotificationDropdown.vue";
-import UserDropdown from "@/components/Dropdowns/UserDropdown.vue";
+import AdminDropdown from "@/components/Dropdowns/AdminDropdown.vue";
 
 export default {
   data() {
@@ -240,7 +241,7 @@ export default {
   },
   components: {
     NotificationDropdown,
-    UserDropdown,
+    AdminDropdown,
   },
 };
 </script>

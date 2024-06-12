@@ -1,17 +1,15 @@
 <template>
-    <Navbar />
-    <RouterView />
-    <Footer />
+  <Navbar />
+  <RouterView />
+  <Footer />
 </template>
 <script>
-import Navbar from '@/components/Navbars/UserNavbar.vue';
-import Footer from '@/components/Footers/Footer.vue';
+import Navbar from "@/components/Navbars/UserNavbar.vue";
+import Footer from "@/components/Footers/Footer.vue";
 export default {
-    components: { Navbar,Footer },
-    data() {
-        return {
-
-        }
-    },
-}
+  components: { Navbar, Footer },
+  data() {
+    return {};
+  },
+};
 </script>

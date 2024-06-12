@@ -1,34 +1,39 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/auth/LoginPage.vue'
-import Register from '@/views/auth/Register.vue'
-import UserLayout from '@/components/layout/UserLayout.vue'
-import AdminLayout from '@/components/layout/AdminLayout.vue'
+// views for Admin layout
 import Dashboard from '@/views/admin/Dashboard.vue'
 import Produk from '@/views/admin/Produk.vue'
 import Admin from '@/views/admin/Admin.vue'
 import Pesanan from '@/views/admin/Pesanan.vue'
 import Karyawan from '@/views/admin/Karyawan.vue'
 import Pelanggan from '@/views/admin/Pelanggan.vue'
+
+// layouts
+import UserLayout from '@/components/layout/UserLayout.vue'
+import Layout from '@/components/layout/Layout.vue'
+import AdminLayout from '@/components/layout/AdminLayout.vue'
+
+// views for Auth layout
+import LoginView from '@/views/auth/LoginPage.vue'
+import Register from '@/views/auth/Register.vue'
+
+// views for User layout
+import HomeView from '@/views/HomeView.vue'
 import History from '@/views/user/History.vue'
+import Profile from '@/views/user/Profile.vue'
 import ShoppingCart from '@/views/user/ShoppingCart.vue'
+import DashboardUser from '@/views/user/Dashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: UserLayout,
+      component: Layout,
       children: [
         {     
         path: '/',
         name: 'home',
         component: HomeView
-      },
-        {     
-        path: '/shoppingcart',
-        name: 'shopping cart',
-        component: ShoppingCart
       },
       {
         path: '/login',
@@ -39,13 +44,43 @@ const router = createRouter({
         path: '/register',
         name: 'register',
         component: Register
-      },    
-      {
-        path: '/riwayat-pesanan',
-        name: 'riwayat-pesanan',
-        component: History
-      }    
+      },      
       ]
+    },
+    {
+      path: '/',
+      component: UserLayout,
+      children: [
+        {
+          path: '/user',
+          name: 'home user',
+          component: HomeView
+        },
+        {
+          path: '/riwayatpesanan',
+          name: 'riwayat-pesanan',
+          component: History
+        },
+        {
+
+          path: '/shoppingcart',
+          name: 'shopping cart',
+          component: ShoppingCart
+        },
+        {
+
+          path: '/profile',
+          name: 'profile',
+          component: Profile
+        },
+        {
+
+          path: '/dashboard',
+          name: 'dashboard-user',
+          component: DashboardUser
+        }
+      ]
+
     },
     {
       path: '/',
@@ -82,14 +117,6 @@ const router = createRouter({
           component: Karyawan
         },
       ]
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
     }
   ]
 })

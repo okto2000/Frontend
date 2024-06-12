@@ -12,35 +12,21 @@
         >
           <img
             alt="..."
-            class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-white-500 hover:ring-blue-300 dark:hover:ring-gray-300"
+            class="w-full rounded-full align-middle border-none shadow-lg"
             :src="image"
           />
         </span>
-        <p v-if="user.username" class="ml-3 font-medium text-Gray-700 hover:text-gray-500">{{ user.username }}</p>
-        <p v-else>Loading...</p>
-        <h3></h3>
       </div>
     </a>
     <div
       ref="popoverDropdownRef"
       class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
-      :class="{
+      v-bind:class="{
         hidden: !dropdownPopoverShow,
         block: dropdownPopoverShow,
       }"
     >
-    <button
-    @click="profile"
-    class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300"
-    >
-    Profile
-    </button>
-    <button
-      @click="logout"
-      class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300"
-    >
-      Logout
-    </button>
+        <button @click="logout" class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300">Logout</button>
     </div>
   </div>
 </template>
@@ -48,18 +34,14 @@
 <script>
 import { createPopper } from "@popperjs/core";
 
-import image from "@/assets/img/user.svg";
+import image from "@/assets/img/team-1-800x800.jpg";
 
 export default {
   data() {
     return {
       dropdownPopoverShow: false,
       image: image,
-      user: {},
     };
-  },
-  created() {
-    this.fetchUser();
   },
   methods: {
     toggleDropdown: function (event) {
@@ -72,16 +54,6 @@ export default {
           placement: "bottom-start",
         });
       }
-    },
-    fetchUser() {
-      setTimeout(() => {
-        this.user = {
-          username: 'Asep Bensin',
-        };
-      }, 1000);
-    },
-    profile() {
-      this.$router.push({ name: "dashboard-user" });
     },
     logout() {
       localStorage.clear();
