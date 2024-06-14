@@ -161,16 +161,17 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.products));
     },
     decrement(obj) {
-      if (obj.quantity > 1) {
+      if (obj.quantity) {
         obj.quantity--;
         localStorage.setItem("cart", JSON.stringify(this.products));
-      } else {
-        const index = this.products.indexOf(obj);
-        if (index !== -1) {
-          this.products.splice(index, 1);
-        }
-      }
+      if (obj.quantity < 1) {
+            const index = this.products.indexOf(obj);
+            if (index == 0) {
+                this.products.splice(index, 1);
+            }
+      }  
       localStorage.setItem("cart", JSON.stringify(this.products));
+    }
     },
   },
 };

@@ -9,7 +9,6 @@ import Pelanggan from '@/views/admin/Pelanggan.vue'
 
 // layouts
 import UserLayout from '@/components/layout/UserLayout.vue'
-import Layout from '@/components/layout/Layout.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 
 // views for Auth layout
