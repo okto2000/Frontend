@@ -1,3 +1,18 @@
+<script setup>
+import team2 from "@/assets/img/user.svg";
+
+const stat = [
+  {
+    name: "Pesanan Belum Dibayar",
+    total: "2",
+  },
+  {
+    name: "Pesanan Sudah Dibayar",
+    total: "2",
+  },
+  { name: "Pesanan Selesai", total: "2" },
+];
+</script>
 <template>
   <section class="mx-auto bg-blueGray-50">
     <div class="w-full px-4 mx-auto">
@@ -10,7 +25,7 @@
               <div class="relative">
                 <img
                   alt="..."
-                  src="@/assets/img/user.svg"
+                  :src="user.picture"
                   class="w-full h-16 shadow-xl rounded-full align-middle border-none"
                 />
               </div>
@@ -36,7 +51,7 @@
             <h3
               class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2"
             >
-              {{ user.username }}
+              {{ user.name }}
             </h3>
             <div
               class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase"
@@ -63,25 +78,13 @@
     </div>
   </section>
 </template>
-<script setup>
-import team2 from "@/assets/img/user.svg";
 
-const stat = [
-  {
-    name: "Pesanan Belum Dibayar",
-    total: "2",
-  },
-  {
-    name: "Pesanan Sudah Dibayar",
-    total: "2",
-  },
-  { name: "Pesanan Selesai", total: "2" },
-];
-
-const user = {
-  username: "Asep Bensin",
-  alamat: "Jl. Cempaka Putih no 23",
-  notlp: "081234567890",
-  email: "Hr6oH@example.com",
-};
+<script>
+export default {
+  data() {
+    return {
+      user: JSON.parse(localStorage.getItem('user')) || {},
+    };  
+    }
+  };
 </script>

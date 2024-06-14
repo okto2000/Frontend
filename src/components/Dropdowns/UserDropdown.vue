@@ -13,12 +13,10 @@
           <img
             alt="..."
             class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-white-500 hover:ring-blue-300 dark:hover:ring-gray-300"
-            :src="image"
+            :src="user.picture"
           />
         </span>
-        <p v-if="user.username" class="ml-3 font-medium text-Gray-700 hover:text-gray-500">{{ user.username }}</p>
-        <p v-else>Loading...</p>
-        <h3></h3>
+        <p class="ml-3 font-medium text-Gray-700 hover:text-gray-500">{{ user.name }}</p>
       </div>
     </a>
     <div
@@ -55,11 +53,8 @@ export default {
     return {
       dropdownPopoverShow: false,
       image: image,
-      user: {},
+      user: JSON.parse(localStorage.getItem('user')) || {},
     };
-  },
-  created() {
-    this.fetchUser();
   },
   methods: {
     toggleDropdown: function (event) {
@@ -72,13 +67,6 @@ export default {
           placement: "bottom-start",
         });
       }
-    },
-    fetchUser() {
-      setTimeout(() => {
-        this.user = {
-          username: 'Asep Bensin',
-        };
-      }, 1000);
     },
     profile() {
       this.$router.push({ name: "dashboard-user" });

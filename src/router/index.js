@@ -28,7 +28,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: Layout,
+      component: UserLayout,
       children: [
         {     
         path: '/',
@@ -44,43 +44,32 @@ const router = createRouter({
         path: '/register',
         name: 'register',
         component: Register
-      },      
+      },
+      {
+
+        path: '/shoppingcart',
+        name: 'shopping cart',
+        component: ShoppingCart
+      },
+      {
+
+        path: '/profile',
+        name: 'profile',
+        component: Profile
+      },
+      {
+
+        path: '/riwayatpesanan',
+        name: 'riwayatpesanan',
+        component: History
+      },
+      {
+
+        path: '/dashboard',
+        name: 'dashboard-user',
+        component: DashboardUser
+      }      
       ]
-    },
-    {
-      path: '/',
-      component: UserLayout,
-      children: [
-        {
-          path: '/user',
-          name: 'home user',
-          component: HomeView
-        },
-        {
-          path: '/riwayatpesanan',
-          name: 'riwayat-pesanan',
-          component: History
-        },
-        {
-
-          path: '/shoppingcart',
-          name: 'shopping cart',
-          component: ShoppingCart
-        },
-        {
-
-          path: '/profile',
-          name: 'profile',
-          component: Profile
-        },
-        {
-
-          path: '/dashboard',
-          name: 'dashboard-user',
-          component: DashboardUser
-        }
-      ]
-
     },
     {
       path: '/',

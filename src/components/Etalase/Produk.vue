@@ -69,13 +69,12 @@ export default {
     }
   },
   methods: {
-    slicedProducts() {
-      return this.products.slice((product) => product.tipe === "Barang");
-    },
+    // slicedProducts() {
+    //   return this.products.slice((product) => product.tipe === "Barang");
+    // },
     isExists(id) {
       var isexists = false;
       var index = null;
-      // debugger
       var carts = JSON.parse(localStorage.getItem("cart"));
       for (var i = 0; i < carts.length; i++) {
         if (carts[i].id == id) {

@@ -11,23 +11,10 @@ import FormUser from "@/components/Form/FormUser.vue";
   </div>
 </template>
 <script>
-import { onUpdated } from "vue";
 export default {
   data() {
     return {
-      user: {
-        username: "Asep Bensin",
-        password: "password",
-      },
-      selected: {},
     };
-  },
-  methods: {
-    onUpdated() {
-      this.user.username = this.selected.username;
-      this.user.password = this.selected.password;
-      this.selected = {};
-    },
-  },
+}
 };
 </script>

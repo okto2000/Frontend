@@ -1,3 +1,15 @@
+<script setup>
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import XMarkIcon from "@/components/icons/XMark.vue";
+import Bars3Icon from "@/components/icons/Bar3.vue";
+import CartIcon from "@/components/icons/cart.vue";
+import UserDropdown from "@/components/Dropdowns/UserDropdown.vue";
+
+const navigation = [
+  { name: "Home", href: "/" },
+];
+</script>
+
 <template>
   <Disclosure as="nav" class="bg-transaparent z-50" v-slot="{ open }">
     <div
@@ -55,9 +67,13 @@
           <li class="inline-block relative">
             <notification-dropdown />
           </li>
-          <li class="inline-block relative">
+          <li v-if="LoggedIn" class="inline-block relative">
             <UserDropdown />
           </li>
+          <div v-else class="hidden sm:ml-6 sm:block">
+          <a href="/login" class="text-black-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
+          <a href="/register" class="text-black-600 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+        </div>
         </ul>
       </div>
     </div>
@@ -72,6 +88,7 @@
           class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium"
           >{{ item.name }}</DisclosureButton
         >
+        
         <a
           href="/shoppingcart"
           class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium"
@@ -83,15 +100,19 @@
   </Disclosure>
 </template>
 
-<script setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import XMarkIcon from "@/components/icons/XMark.vue";
-import Bars3Icon from "@/components/icons/Bar3.vue";
-import CartIcon from "@/components/icons/cart.vue";
-import UserDropdown from "@/components/Dropdowns/UserDropdown.vue";
-
-const navigation = [
-  { name: "Home", href: "/user" },
-  { name: "Riwayat Pesanan", href: "/riwayatpesanan" },
-];
+<script>
+export default {
+  data() {
+    return {
+    };
+  },
+  created() {
+    // Check localStorage for existing login data
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+      this.LoggedIn = true;
+    }
+  },
+};
 </script>

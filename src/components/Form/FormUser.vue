@@ -17,7 +17,7 @@
                 >Photo</label
               >
               <div class="mt-2 flex items-center gap-x-3">
-                <img src="@/assets/img/user.svg" class="w-12 h-12" alt="" />
+                <img :src="user.picture" class="w-12 h-12" alt="" />
                 <UserCircleIcon
                   class="h-12 w-12 text-gray-300"
                   aria-hidden="true"
@@ -47,13 +47,13 @@
         id="username" 
         autocomplete="username" 
         class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-600 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-        :placeholder="user.username" 
-        v-model="selected.username" 
+        placeholder="username" 
+        v-model="user.name" 
       />
                   </div>
                 </div>
               </div>
-              <div class="sm:col-span-4">
+              <!-- <div class="sm:col-span-4">
                 <label
                   for="password"
                   class="block text-sm font-medium leading-6 text-gray-900"
@@ -69,57 +69,17 @@
                       id="password"
                       autocomplete="password"
                       class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-600 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                      :placeholder="user.password"
-                      v-model="selected.password"
+                      placeholder="password"
+                      v-model="user.password"
                     />
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
           <div class="border-b border-gray-900/10 pb-12">
-            <h2 class="text-base font-semibold leading-7 text-gray-900">
-              Personal Information
-            </h2>
-            <p class="mt-1 text-sm leading-6 text-gray-600">
-              Use a permanent address where you can receive mail.
-            </p>
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div class="sm:col-span-3">
-                <label
-                  for="first-name"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >First name</label
-                >
-                <div class="mt-2">
-                  <input
-                    type="text"
-                    name="first-name"
-                    id="first-name"
-                    autocomplete="given-name"
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-
-              <div class="sm:col-span-3">
-                <label
-                  for="last-name"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >Last name</label
-                >
-                <div class="mt-2">
-                  <input
-                    type="text"
-                    name="last-name"
-                    id="last-name"
-                    autocomplete="family-name"
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-
               <div class="sm:col-span-4">
                 <label
                   for="email"
@@ -133,6 +93,7 @@
                     type="email"
                     autocomplete="email"
                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    v-model="user.email"
                   />
                 </div>
               </div>
@@ -225,23 +186,34 @@
 </template>
 
 <script>
-import { onUpdated } from "vue";
 export default {
-data() {
-  return {
-    user: {
-      username: "Asep Bensin",
-      password: "password",
-    },
-    selected: {},
-  };
-},
-    methods: {
-  onUpdated() {
-    this.user.username = this.selected.username;
-    this.user.password = this.selected.password;
-    this.selected = {};
+
+  data() {
+    return {
+      user: {
+        name: '',
+        password: ''
       }
+    };
+  },
+  created() {
+    this.loadUser();
+  },
+  methods: {
+    loadUser() {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
+    updateUser() {
+      localStorage.setItem('user', JSON.stringify(this.user));
+      alert('User updated successfully!');
+      console.log(this.user);
+    },
+    resetForm() {
+      this.loadUser();
     }
   }
+};
 </script>
