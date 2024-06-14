@@ -41,30 +41,30 @@ const scrollToProduk = () => {
       <Polygon/>
     </div>
     <div class="flex justify-center w-full">
-      <div class="flex lg:mx-8">
+      <div class="flex mx-auto">
         <IconChat/>
-        <div class="flex-col mx-4">
+        <div class="flex-col mx-auto">
           <h1 class="font-semibold lg:text-lg text-sm">KONSULTASI GRATIS</h1>
           <p class="text-xs lg:text-base">Dapatkan Konsultasi Kesehatan Gratis di Petshop Kami!</p>
         </div>
       </div>
-      <div class="flex lg:mx-4">
+      <div class="flex mx-auto">
         <IconCheckbox/>
-        <div class="flex-col mx-4">
+        <div class="flex-col mx-auto">
           <h1 class="font-semibold lg:text-lg text-sm">JAMINAN KUALITAS</h1>
           <p  class="text-xs lg:text-base">Kualitas Layanan Terjamin di Petshop Kami!</p>
         </div>
       </div>
-      <div class="flex lg:mx-4">
+      <div class="flex mx-auto">
         <IconTag/>
-        <div class="flex-col mx-4">
+        <div class="flex-col mx-auto">
           <h1 class="font-semibold lg:text-lg text-sm">PROMO SPESIAL</h1>
           <p  class="text-xs lg:text-base">Nikmati Promo Spesial Bagi Pelanggan Setia di Petshop Kami!</p>
         </div>
       </div>
-      <div class="flex lg:mx-4">
+      <div class="flex mx-auto">
         <IconShielcheck/>
-        <div class="flex-col mx-4">
+        <div class="flex-col mx-auto">
           <h1 class="font-semibold lg:text-lg text-sm">PEMBAYARAN 100% AMAN</h1>
           <p  class="text-xs lg:text-base">Pembayaran 100% Aman di Petshop Kami!</p>
         </div>

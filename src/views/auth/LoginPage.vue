@@ -17,8 +17,8 @@
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST">
-        <div class="mt-2 w-full flex justify-center">
-          <GoogleLogin :callback="callback" prompt auto-login />
+        <div class="">
+          <GoogleLogin :callback="callback" prompt auto-login class="w-full"/>
         </div>
         <div>
           <label
@@ -95,7 +95,7 @@ export default {
 
         localStorage.setItem('user', JSON.stringify(this.user));
 
-        this.$router.push({ name: 'home' });
+        window.location.href = '/';
       },
     };
   },

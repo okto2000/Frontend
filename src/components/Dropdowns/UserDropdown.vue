@@ -73,7 +73,7 @@ export default {
     },
     logout() {
       localStorage.clear();
-      this.$router.push({ name: "login" });
+      window.location.href = '/login';
     },
   },
 };

@@ -88,7 +88,12 @@ const navigation = [
           class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium"
           >{{ item.name }}</DisclosureButton
         >
-        
+        <div v-if="!LoggedIn">
+          <a href="/login" class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium">Login</a>
+        </div>
+        <div v-if="!LoggedIn">
+          <a href="/register" class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium">Register</a>
+        </div>
         <a
           href="/shoppingcart"
           class="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white, block rounded-md px-3 py-2 text-base font-medium"

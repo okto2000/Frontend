@@ -6,10 +6,10 @@ import Testimonial from "@/components/Testimonial/Testimonial.vue";
 </script>
 
 <template>
-  <main>
+  <div class="container">
     <Hero />
     <Produk id="produk" />
     <Layanan id="layanan" />
     <Testimonial />
-  </main>
+  </div>
 </template>
