@@ -49,11 +49,16 @@ import { createPopper } from "@popperjs/core";
 import image from "@/assets/img/user.svg";
 
 export default {
+  props: {
+    user: {
+      default:{}
+    }
+  }, 
   data() {
     return {
       dropdownPopoverShow: false,
       image: image,
-      user: JSON.parse(localStorage.getItem('user')) || {},
+      // user: JSON.parse(localStorage.getItem('user')) || {},
     };
   },
   methods: {

@@ -1,11 +1,3 @@
-<!-- <script setup>
-const firstName = defineModel('firstName')
-const province = defineModel('DKI Jakarta')
-const city = defineModel('Jakarta')
-const street = defineModel('Jl. ABC No. 123')
-const postal = defineModel('12345')
-const notlp = defineModel('08123456789')
-</script> -->
 <template>
   <form class="mx-auto">
     <div class="space-y-12">
@@ -27,7 +19,15 @@ const notlp = defineModel('08123456789')
               class="h-12 w-12 text-gray-300"
               aria-hidden="true"
             />
+            <input
+              type="file"
+              accept="image/*"
+              @change="changePhoto"
+              class="hidden"
+              ref="fileInput"
+            />
             <button
+              @click="$refs.fileInput.click()"
               type="button"
               class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
@@ -115,7 +115,7 @@ const notlp = defineModel('08123456789')
                 type="number"
                 autocomplete="telepon"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                v-model="notlp"
+                v-model="user.telepon"
               />
             </div>
           </div>
@@ -124,69 +124,17 @@ const notlp = defineModel('08123456789')
             <label
               for="street-address"
               class="block text-sm font-medium leading-6 text-gray-900"
-              >Street address</label
+              >Alamat</label
             >
             <div class="mt-2">
               <input
                 type="text"
-                name="street-address"
-                id="street-address"
+                name="alamat"
+                id="alamat"
                 autocomplete="street-address"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                v-model="user.street"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2 sm:col-start-1">
-            <label
-              for="city"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >City</label
-            >
-            <div class="mt-2">
-              <input
-                type="text"
-                name="city"
-                id="city"
-                autocomplete="address-level2"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" v-model="user.city"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label
-              for="region"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >State / Province</label
-            >
-            <div class="mt-2">
-              <input
-                type="text"
-                name="region"
-                id="region"
-                autocomplete="address-level1"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                v-model="province"
-              />
-            </div>
-          </div>
-
-          <div class="sm:col-span-2">
-            <label
-              for="postal-code"
-              class="block text-sm font-medium leading-6 text-gray-900"
-              >ZIP / Postal code</label
-            >
-            <div class="mt-2">
-              <input
-                type="text"
-                name="postal-code"
-                id="postal-code"
-                autocomplete="postal-code"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                v-model="user.postal"
+                placeholder="masukan alamat lengkap dan juga kode post anda"
+                v-model="user.alamat"
               />
             </div>
           </div>
@@ -201,26 +149,30 @@ const notlp = defineModel('08123456789')
       >
         Cancel
       </button>
-      <button
-        @click="onUpdated(user)"
-        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      <buttonsave type="secondary"
+        @click="onUpdated"
       >
         Save
-      </button>
+      </buttonsave>
     </div>
   </form>
 </template>
 
 <script>
+import buttonsave from "@/components/Button/Status.vue";
+import { onUpdated } from "vue";
+
 export default {
+  components: {
+    buttonsave,
+  },
   data() {
     return {
       user: {
         name: "",
-        password: "",
-        postal: "",
-        city: "",
-        notlp: "",
+        // password: "",
+        alamat: "",
+        telpon: "",
       },
     };
   },
@@ -234,13 +186,24 @@ export default {
         this.user = JSON.parse(storedUser);
       }
     },
-    updateUser() {
+    onUpdated() {
       localStorage.setItem("user", JSON.stringify(this.user));
       alert("User updated successfully!");
       console.log(this.user);
+      this.$emit("userUpdate")
     },
     resetForm() {
       this.loadUser();
+    },
+    changePhoto(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.user.picture = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
     },
   },
 };

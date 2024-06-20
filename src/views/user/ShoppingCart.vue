@@ -1,6 +1,3 @@
-<script setup>
-import FormCheckout from "@/components/Form/FormCheckout.vue";
-</script>
 <template>
   <div>
     <h3 class="text-lg font-bold">Shopping Cart</h3>
@@ -125,7 +122,11 @@ import FormCheckout from "@/components/Form/FormCheckout.vue";
   </div>
 </template>
 <script>
+import FormCheckout from "@/components/Form/FormCheckout.vue";
 export default {
+  components:{
+    FormCheckout
+  },
   data() {
     return {
       quantity: [],

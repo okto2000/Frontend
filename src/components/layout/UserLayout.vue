@@ -1,6 +1,6 @@
 <template>
-  <Navbar />
-  <RouterView />
+  <Navbar :userchange="userchange" />
+  <RouterView @updateUser="updateUser"/>
   <Footer />
 </template>
 <script>
@@ -9,7 +9,16 @@ import Footer from "@/components/Footers/Footer.vue";
 export default {
   components: { Navbar, Footer },
   data() {
-    return {};
+    return {
+      userchange: false,
+    };
+  },
+  methods: {
+    updateUser() {
+      alert("User updated successfully");
+      this.userchange=!this.userchange;
+    },
   },
 };
 </script>
+

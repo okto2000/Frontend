@@ -1,7 +1,8 @@
 <template>
   <div
-    class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8"
+    class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 rounded-xl bg-gradient-to-b from-transparent from-2% via-sky-200 via-50% via-emerald-100 to-90%"
   >
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm border p-6 bg-white border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <img
         class="mx-auto h-10 w-auto"
@@ -17,7 +18,7 @@
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST">
-        <div class="">
+        <div class="flex justify-center">
           <GoogleLogin :callback="callback" prompt auto-login class="w-full"/>
         </div>
         <div>
@@ -75,6 +76,8 @@
         </div>
       </form>
     </div>
+
+  </div>
   </div>
 </template>
 
@@ -94,7 +97,8 @@ export default {
         this.user = decodeCredential(response.credential);
 
         localStorage.setItem('user', JSON.stringify(this.user));
-
+        // this.$router.push({name: "home"})
+        // this.$emit("userUpdate")
         window.location.href = '/';
       },
     };

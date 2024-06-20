@@ -1,23 +1,8 @@
-<script setup>
-import team2 from "@/assets/img/user.svg";
-
-const stat = [
-  {
-    name: "Pesanan Belum Dibayar",
-    total: "2",
-  },
-  {
-    name: "Pesanan Sudah Dibayar",
-    total: "2",
-  },
-  { name: "Pesanan Selesai", total: "2" },
-];
-</script>
 <template>
   <section class="mx-auto bg-blueGray-50">
     <div class="w-full px-4 mx-auto">
       <div
-        class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16"
+        class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16 border"
       >
         <div class="px-6">
           <div class="flex flex-wrap justify-center">
@@ -56,14 +41,14 @@ const stat = [
             <div
               class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase"
             >
-              <i
-                class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"
-              ></i>
+              <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400">
+                </i
+              >
               {{ user.alamat }}
             </div>
             <div class="mb-2 text-blueGray-600 mt-10">
               <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-              {{ user.notlp }}
+              {{ user.telepon }}
             </div>
             <div class="mb-2 text-blueGray-600">
               <i class="fas fa-university mr-2 text-lg text-blueGray-400"></i>
@@ -80,11 +65,23 @@ const stat = [
 </template>
 
 <script>
+import team2 from "@/assets/img/user.svg";
 export default {
   data() {
     return {
-      user: JSON.parse(localStorage.getItem('user')) || {},
-    };  
-    }
-  };
+      stat: [
+        {
+          name: "Pesanan Belum Dibayar",
+          total: "2",
+        },
+        {
+          name: "Pesanan Sudah Dibayar",
+          total: "2",
+        },
+        { name: "Pesanan Selesai", total: "2" },
+      ],
+      user: JSON.parse(localStorage.getItem("user")) || {},
+    };
+  },
+};
 </script>

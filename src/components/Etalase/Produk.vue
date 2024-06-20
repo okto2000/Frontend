@@ -2,11 +2,11 @@
   <div
     class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20"
   >
-    <h2 class="text-2xl font-bold tracking-tight text-gray-900">Produk</h2>
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900">Produk →</h2>
     <div
       class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
     >
-      <div v-for="product in products" :key="product.id" class="group">
+      <div v-for="product in products" :key="product.id" class="group lg:shadow-lg">
         <div
           class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
@@ -35,12 +35,11 @@
               <span class="text-1xl font-bold text-gray-900 dark:text-white">{{
                 product.price.toLocaleString('id-ID',{ style: 'currency', currency: 'IDR' })
               }}</span>
-              <button
+              <Buttoncart
                 @click="addToCart(product)"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Add to cart
-              </button>
+              </Buttoncart>
             </div>
           </div>
         </div>
@@ -50,7 +49,12 @@
 </template>
 
 <script>
+import Buttoncart from "@/components/Button/AddCart.vue";
+
 export default {
+  components: {
+    Buttoncart
+  },
   data() {
     return {
       products: [],
