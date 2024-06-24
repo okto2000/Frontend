@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <h3 class="text-lg font-bold">Shopping Cart</h3>
     <div class="group relative">
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">

@@ -7,9 +7,14 @@ import Pesanan from '@/views/admin/Pesanan.vue'
 import Karyawan from '@/views/admin/Karyawan.vue'
 import Pelanggan from '@/views/admin/Pelanggan.vue'
 
+// views for Karyawan layout
+import DashboardKaryawan from '@/views/karyawan/Dashboard.vue'
+import PesananKaryawan from '@/views/karyawan/Pesanan.vue'
+
 // layouts
 import UserLayout from '@/components/layout/UserLayout.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
+import KaryawanLayout from '@/components/layout/KaryawanLayout.vue'
 
 // views for Auth layout
 import LoginView from '@/views/auth/LoginPage.vue'
@@ -103,6 +108,22 @@ const router = createRouter({
           path: '/admin/karyawan',
           name: 'karyawan',
           component: Karyawan
+        },
+      ]
+    },
+    {
+      path: '/',
+      component: KaryawanLayout,
+      children: [
+        {
+          path: '/karyawan',
+          name: 'dashboardkaryawan',
+          component: DashboardKaryawan
+        },
+        {
+          path: '/karyawan/pesanan',
+          name: 'pesanankaryawan',
+          component: PesananKaryawan
         },
       ]
     }

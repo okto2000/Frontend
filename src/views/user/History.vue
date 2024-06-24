@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:flex space-x-4 lg:mx-16">
+  <div class="lg:flex space-x-2 lg:mx-auto container">
     <Sidebar />
     <div
       class="p-6 w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"

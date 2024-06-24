@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main class="sm:flex mx-auto max-w-7xl px-6 lg:px-8">
+    <main class="sm:flex mx-auto max-w-7xl px-6 lg:px-8 container">
       <Sidebar />
       <CardProfile />
     </main>

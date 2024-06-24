@@ -32,7 +32,7 @@
           </button>
           <button @click="pay"
           type="button"
-          class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-50 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
+          class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-100 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
            >
             Checkout
           </button>
