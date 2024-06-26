@@ -1,22 +1,29 @@
 <template>
   <div>
     <h1 class="mb-12 font-bold">Data Produk</h1>
-    <input
-      v-model="selected.username"
-      type="text"
-      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
-    />
-    <input
-      v-model="selected.password"
-      type="text"
-      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
-    />
-    <button
-      @click="onUpdated"
-      class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-    >
-      Update
-    </button>
+    <form @submit.prevent="saveAdmin">
+      <input
+        v-model="newAdmin.username"
+        type="text"
+        class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+      />
+      <input
+        v-model="newAdmin.email"
+        type="email"
+        class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+      />
+      <input
+        v-model="newAdmin.password"
+        type="password"
+        class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+      />
+      <button
+        type="submit"
+        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
+      >
+        {{ isEditMode ? "Update" : "Add" }}
+      </button>
+    </form>
     <div class="mb-12">
       <table
         class="border-spacing-4 border border-slate-500 w-full text-center"
@@ -25,29 +32,33 @@
           <tr class="border border-slate-600">
             <th class="border border-slate-600">Id</th>
             <th class="border border-slate-600">Username</th>
+            <th class="border border-slate-600">Email</th>
             <th class="border border-slate-600">Password</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in admin" :key="user.id">
+          <tr v-for="admin in admins" :key="admin.id_admin">
             <td class="border border-slate-700">
-              {{ user.id }}
+              {{ admin.id_admin }}
             </td>
             <td class="border border-slate-700">
-              {{ user.username }}
+              {{ admin.username }}
             </td>
             <td class="border border-slate-700">
-              {{ user.password }}
+              {{ admin.email }}
+            </td>
+            <td class="border border-slate-700">
+              {{ admin.password }}
             </td>
             <td class="space-x-2 border border-slate-700">
               <button
-                @click="onEdit(user)"
+                @click="onEdit(admin)"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
               >
                 Edit
               </button>
               <button
-                @click="onDelete(user)"
+                @click="onDelete(admin.id_admin)"
                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
               >
                 Delete
@@ -60,36 +71,107 @@
   </div>
 </template>
 <script>
-import { onUpdated } from "vue";
+import axios from "axios";
 
 export default {
   data() {
     return {
-      admin: [],
-      selected: {},
+      admins: [],
+      newAdmin: {
+        username: "",
+        email: "",
+        password: "",
+      },
+      currentAdmin: null,
+      isEditMode: false,
     };
   },
   created() {
-    for (let index = 0; index < 8; index++) {
-      this.admin.push({
-        id: index,
-        username: "username " + index,
-        password: "password " + index,
-      });
-    }
+    this.fetchAdmins();
   },
   methods: {
-    onEdit(user) {
-      this.selected = { ...user };
+    fetchAdmins() {
+      axios
+        .get("http://localhost:8000/api/admin")
+        .then((response) => {
+          this.admins = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    onDelete(user) {
-      this.admin.splice(user.id, 1);
+    saveAdmin() {
+      const { isEditMode, currentAdmin, newAdmin, updateAdmin, createAdmin } = this;
+
+      if (isEditMode && currentAdmin) {
+        updateAdmin(currentAdmin.id_admin, newAdmin);
+      } else {
+        createAdmin();
+      }
     },
-    onUpdated() {
-      var a = this.admin.find((admin) => admin.id == this.selected.id);
-      a.username = this.selected.username;
-      var a = this.admin.find((admin) => admin.id == this.selected.id);
-      a.password = this.selected.password;
+    createAdmin() {
+      const { newAdmin } = this;
+      const adminData = {
+        username: newAdmin.username,
+        email: newAdmin.email,
+        password: newAdmin.password,
+      };
+      
+      axios.post("http://localhost:8000/api/admin", adminData)
+        .then(response => this.admins.push(response.data))
+        .catch(console.error);
+
+      this.resetNewAdminForm();
+    },
+    resetNewAdminForm() {
+      this.newAdmin = {
+        username: '',
+        email: '',
+        password: '',
+      };
+    },
+    updateAdmin(id_admin, updatedData) {
+      axios
+        .put(`http://localhost:8000/api/admin/${id_admin}`, updatedData)
+        .then(({ data }) => {
+          const updatedAdminIndex = this.admins.findIndex((admin) => admin.id === id_admin);
+          if (updatedAdminIndex !== -1) {
+            this.admins[updatedAdminIndex] = data;
+          }
+          this.fetchAdmins();
+          this.resetForm();
+        })
+        .catch((error) => {
+          console.error(`Failed to update admin with id ${id_admin}:`, error);
+        });
+    },
+    async onDelete(id_admin) {
+      try {
+        await axios.delete(`http://localhost:8000/api/admin/${id_admin}`);
+        this.admins = this.admins.filter(admin => admin.id !== id_admin);
+        this.fetchAdmins();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    onEdit(admin) {
+      this.currentAdmin = admin;
+      this.newAdmin = {
+        username: admin.username,
+        email: admin.email,
+        password: "",
+      };
+      this.isEditMode = true;
+    },
+    resetForm() {
+      this.newAdmin = {
+        username: "",
+        email: "",
+        password: "",
+      };
+      this.currentAdmin = null;
+      this.isEditMode = false;
     },
   },
 };

@@ -6,6 +6,7 @@ import Admin from '@/views/admin/Admin.vue'
 import Pesanan from '@/views/admin/Pesanan.vue'
 import Karyawan from '@/views/admin/Karyawan.vue'
 import Pelanggan from '@/views/admin/Pelanggan.vue'
+import Kategori from '@/views/admin/Kategori.vue'
 
 // views for Karyawan layout
 import DashboardKaryawan from '@/views/karyawan/Dashboard.vue'
@@ -98,6 +99,11 @@ const router = createRouter({
           path: '/admin/admin',
           name: 'admin',
           component: Admin
+        },
+        {
+          path: '/admin/kategori',
+          name: 'admin',
+          component: Kategori
         },
         {
           path: '/admin/pelanggan',
