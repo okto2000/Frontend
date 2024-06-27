@@ -35,7 +35,7 @@
   </template>
   
   <script>
-  import KaryawanDropdown from "@/components/Dropdowns/KaryawanDropdown.vue";
+  import KaryawanDropdown from "@/components/Dropdowns/EmployeeDropdown.vue";
   
   export default {
     components: {

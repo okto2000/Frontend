@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1 class="mb-12 font-bold">Data Produk</h1>
+      <h1 class="mb-12 font-bold">Data Order</h1>
       <input v-model="selected.name" type="text" class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring">
       <input v-model="selected.imageSrc" type="text" class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring">
       <input v-model="selected.price" type="text" class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring">

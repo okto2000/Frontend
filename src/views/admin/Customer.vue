@@ -1,36 +1,32 @@
 <template>
     <div>
-      <h1 class="mb-12 font-bold">Data Pelanggan</h1>
+      <h1 class="mb-12 font-bold">Data Customer</h1>
       <table class="border-spacing-4 border border-slate-500 w-full text-center">
         <thead>
           <tr class="border border-slate-600">
             <th class="border border-slate-600">Id</th>
-            <th class="border border-slate-600">Username</th>
-            <th class="border border-slate-600">Nama</th>
-            <th class="border border-slate-600">Alamat</th>
+            <th class="border border-slate-600">Name</th>
+            <th class="border border-slate-600">Address</th>
             <th class="border border-slate-600">No Telepon</th>
             <th class="border border-slate-600">Email</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pelanggan in pelanggans" :key="pelanggan.id_pelanggan">
+          <tr v-for="customer in customers" :key="customer.id">
             <td class="border border-slate-700">
-              {{ pelanggan.id_pelanggan }}
+              {{ customer.id }}
             </td>
             <td class="border border-slate-700">
-              {{ pelanggan.username }}
+              {{ customer.name }}
             </td>
             <td class="border border-slate-700">
-              {{ pelanggan.nama }}
+              {{ customer.address }}
             </td>
             <td class="border border-slate-700">
-              {{ pelanggan.alamat }}
+              {{ customer.notelp }}
             </td>
             <td class="border border-slate-700">
-              {{ pelanggan.notelp }}
-            </td>
-            <td class="border border-slate-700">
-              {{ pelanggan.email }}
+              {{ customer.email }}
             </td>
           </tr>
         </tbody>
@@ -43,11 +39,10 @@
   export default {
     data() {
       return {
-          pelanggans: [],
-          newPelanggan: {
-          username: "",
-          nama: "",
-          alamat: "",
+          customers: [],
+          newCustomer: {
+          name: "",
+          address: "",
           notlp: "",
           gaji: "",
           status: "",
@@ -57,14 +52,14 @@
       };
     },
     created() {
-      this.fetchPelanggan();
+      this.fetchCustomer();
     },
     methods: {
-      fetchPelanggan() {
+      fetchCustomer() {
         axios
-          .get("http://localhost:8000/api/pelanggan")
+          .get("http://localhost:8000/api/customer")
           .then((response) => {
-            this.pelanggans = response.data;
+            this.customers = response.data;
           })
           .catch((error) => {
             console.error(error);

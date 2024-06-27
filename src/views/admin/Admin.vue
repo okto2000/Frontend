@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="mb-12 font-bold">Data Produk</h1>
-    <form @submit.prevent="saveAdmin">
+    <h1 class="mb-12 font-bold">Data Admin</h1>
+    <form @submit.prevent="saveAdmin" class="space-x-2">
       <input
         v-model="newAdmin.username"
         type="text"
@@ -23,6 +23,9 @@
       >
         {{ isEditMode ? "Update" : "Add" }}
       </button>
+      <button @click="resetForm" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center">
+        Reset
+      </button>
     </form>
     <div class="mb-12">
       <table
@@ -34,12 +37,13 @@
             <th class="border border-slate-600">Username</th>
             <th class="border border-slate-600">Email</th>
             <th class="border border-slate-600">Password</th>
+            <th class="border border-slate-600">Aksi</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="admin in admins" :key="admin.id_admin">
+          <tr v-for="admin in admins" :key="admin.id" class="text-xs">
             <td class="border border-slate-700">
-              {{ admin.id_admin }}
+              {{ admin.id }}
             </td>
             <td class="border border-slate-700">
               {{ admin.username }}
@@ -58,7 +62,7 @@
                 Edit
               </button>
               <button
-                @click="onDelete(admin.id_admin)"
+                @click="onDelete(admin.id)"
                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
               >
                 Delete
@@ -104,7 +108,7 @@ export default {
       const { isEditMode, currentAdmin, newAdmin, updateAdmin, createAdmin } = this;
 
       if (isEditMode && currentAdmin) {
-        updateAdmin(currentAdmin.id_admin, newAdmin);
+        updateAdmin(currentAdmin.id, newAdmin);
       } else {
         createAdmin();
       }
@@ -130,11 +134,11 @@ export default {
         password: '',
       };
     },
-    updateAdmin(id_admin, updatedData) {
+    updateAdmin(id, updatedData) {
       axios
-        .put(`http://localhost:8000/api/admin/${id_admin}`, updatedData)
+        .put(`http://localhost:8000/api/admin/${id}`, updatedData)
         .then(({ data }) => {
-          const updatedAdminIndex = this.admins.findIndex((admin) => admin.id === id_admin);
+          const updatedAdminIndex = this.admins.findIndex((admin) => admin.id === id);
           if (updatedAdminIndex !== -1) {
             this.admins[updatedAdminIndex] = data;
           }
@@ -142,13 +146,13 @@ export default {
           this.resetForm();
         })
         .catch((error) => {
-          console.error(`Failed to update admin with id ${id_admin}:`, error);
+          console.error(`Failed to update admin with id ${id}:`, error);
         });
     },
-    async onDelete(id_admin) {
+    async onDelete(id) {
       try {
-        await axios.delete(`http://localhost:8000/api/admin/${id_admin}`);
-        this.admins = this.admins.filter(admin => admin.id !== id_admin);
+        await axios.delete(`http://localhost:8000/api/admin/${id}`);
+        this.admins = this.admins.filter(admin => admin.id !== id);
         this.fetchAdmins();
       } catch (error) {
         console.error(error);

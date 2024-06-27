@@ -12,10 +12,10 @@
     </div>
   </template>
   <script>
-  import KaryawanNavbar from "@/components/Navbars/KaryawanNavbar.vue";
-  import Sidebar from "@/components/Sidebar/KaryawanSidebar.vue";
+  import KaryawanNavbar from "@/components/Navbars/EmployeeNavbar.vue";
+  import Sidebar from "@/components/Sidebar/EmployeeSidebar.vue";
   import HeaderStats from "@/components/Headers/HeaderStats.vue";
-  import FooterKaryawan from "@/components/Footers/FooterKaryawan.vue";
+  import FooterKaryawan from "@/components/Footers/EmployeeKaryawan.vue";
   export default {
     components: {
      KaryawanNavbar,

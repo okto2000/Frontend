@@ -1,27 +1,27 @@
 <template>
   <div>
-    <h1 class="mb-12 font-bold">Data Produk</h1>
-    <form @submit.prevent="saveProduk">
+    <h1 class="mb-12 font-bold">Data Product</h1>
+    <form @submit.prevent="saveProduct" class="space-x-2">
       <input
-        v-model="newProduk.nama_produk"
+        v-model="newProduct.product_name"
         type="text"
         class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
       />
       <input
-        v-model="newProduk.image"
+        v-model="newProduct.image"
         type="text"
         class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
       />
       <select
-        v-model="newProduk.id_kategori"
+        v-model="newProduct.id_category"
         type="text"
         class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
       >
-      <option value="produk">Produk</option>
-      <option value="layanan">Layanan</option>
+      <option value="produk">Product</option>
+      <option value="layanan">Service</option>
     </select>
       <input
-        v-model="newProduk.price"
+        v-model="newProduct.price"
         type="text"
         class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
       />
@@ -31,6 +31,9 @@
       >
         {{ isEditMode ? "Update" : "Add" }}
       </button>
+      <button @click="resetForm" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center">
+        Reset
+      </button>
     </form>
     <div class="mb-12">
       <table
@@ -39,26 +42,26 @@
         <thead>
           <tr class="border border-slate-600">
             <th class="border border-slate-600">Id</th>
-            <th class="border border-slate-600">Nama</th>
-            <th class="border border-slate-600">Gambar</th>
-            <th class="border border-slate-600">Kategori</th>
+            <th class="border border-slate-600">Product Name</th>
+            <th class="border border-slate-600">Image</th>
+            <th class="border border-slate-600">Category</th>
             <th class="border border-slate-600">Price</th>
             <th class="border border-slate-600">Aksi</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="produk in produks" :key="produk.id_produk">
+          <tr v-for="produk in produks" :key="produk.id">
             <td class="border border-slate-700">
-              {{ produk.id_produk }}
+              {{ produk.id }}
             </td>
             <td class="border border-slate-700">
-              {{ produk.nama_produk }}
+              {{ produk.product_name }}
             </td>
             <td class="border border-slate-700">
               {{ produk.image }}
             </td>
             <td class="border border-slate-700">
-              {{ produk.id_kategori }}
+              {{ produk.id_category }}
             </td>
             <td class="border border-slate-700">
               {{ produk.price }}
@@ -71,7 +74,7 @@
                 Edit
               </button>
               <button
-                @click="onDelete(produk.id_produk)"
+                @click="onDelete(produk.id)"
                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
               >
                 Delete
@@ -89,21 +92,21 @@ export default {
   data() {
     return {
       produks: [],
-      newProduk: {
-        nama_produk: "",
+      newProduct: {
+        product_name: "",
         image: "",
-        id_kategori: "",
+        id_category: "",
         price: "",
       },
-      currentProduk: null,
+      currentProduct: null,
       isEditMode: false,
     };
   },
   created() {
-    this.fetchProduks();
+    this.fetchProducts();
   },
   methods: {
-    fetchProduks() {
+    fetchProducts() {
       axios
         .get("http://localhost:8000/api/produk")
         .then((response) => {
@@ -113,27 +116,27 @@ export default {
           console.error(error);
         });
     },
-    saveProduk() {
+    saveProduct() {
       const {
         isEditMode,
-        currentProduk,
-        newProduk,
-        updateProduk,
-        createProduk,
+        currentProduct,
+        newProduct,
+        updateProduct,
+        createProduct,
       } = this;
 
-      if (isEditMode && currentProduk) {
-        updateProduk(currentProduk.id_produk, newProduk);
+      if (isEditMode && currentProduct) {
+        updateProduct(currentProduct.id, newProduct);
       } else {
-        createProduk();
+        createProduct();
       }
     },
-    createProduk() {
-      const { newProduk } = this;
+    createProduct() {
+      const { newProduct } = this;
       const produkData = {
-        username: newProduk.username,
-        email: newProduk.email,
-        password: newProduk.password,
+        username: newProduct.username,
+        email: newProduct.email,
+        password: newProduct.password,
       };
 
       axios
@@ -141,45 +144,45 @@ export default {
         .then((response) => this.produks.push(response.data))
         .catch(console.error);
 
-      this.resetNewProdukForm();
+      this.resetNewProductForm();
     },
-    resetNewProdukForm() {
-      this.newProduk = {
+    resetNewProductForm() {
+      this.newProduct = {
         username: "",
         email: "",
         password: "",
       };
     },
-    updateProduk(id_produk, updatedData) {
+    updateProduct(id, updatedData) {
       axios
-        .put(`http://localhost:8000/api/produk/${id_produk}`, updatedData)
+        .put(`http://localhost:8000/api/produk/${id}`, updatedData)
         .then(({ data }) => {
-          const updatedProdukIndex = this.produks.findIndex(
-            (produk) => produk.id === id_produk
+          const updatedProductIndex = this.produks.findIndex(
+            (produk) => produk.id === id
           );
-          if (updatedProdukIndex !== -1) {
-            this.produks[updatedProdukIndex] = data;
+          if (updatedProductIndex !== -1) {
+            this.produks[updatedProductIndex] = data;
           }
-          this.fetchProduks();
+          this.fetchProducts();
           this.resetForm();
         })
         .catch((error) => {
-          console.error(`Failed to update produk with id ${id_produk}:`, error);
+          console.error(`Failed to update produk with id ${id}:`, error);
         });
     },
-    async onDelete(id_produk) {
+    async onDelete(id) {
       try {
-        await axios.delete(`http://localhost:8000/api/produk/${id_produk}`);
-        this.produks = this.produks.filter((produk) => produk.id !== id_produk);
-        this.fetchProduks();
+        await axios.delete(`http://localhost:8000/api/produk/${id}`);
+        this.produks = this.produks.filter((produk) => produk.id !== id);
+        this.fetchProducts();
       } catch (error) {
         console.error(error);
       }
     },
 
     onEdit(produk) {
-      this.currentProduk = produk;
-      this.newProduk = {
+      this.currentProduct = produk;
+      this.newProduct = {
         username: produk.username,
         email: produk.email,
         password: "",
@@ -187,12 +190,12 @@ export default {
       this.isEditMode = true;
     },
     resetForm() {
-      this.newProduk = {
+      this.newProduct = {
         username: "",
         email: "",
         password: "",
       };
-      this.currentProduk = null;
+      this.currentProduct = null;
       this.isEditMode = false;
     },
   },
