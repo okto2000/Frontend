@@ -34,7 +34,7 @@
     Profile
     </button>
     <button
-      @click="logout"
+      @click="handleLogout"
       class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300"
     >
       Logout
@@ -45,7 +45,7 @@
 
 <script>
 import { createPopper } from "@popperjs/core";
-
+import { logout } from "@/helpers/apiService";
 import image from "@/assets/img/user.svg";
 
 export default {
@@ -76,10 +76,16 @@ export default {
     profile() {
       this.$router.push({ name: "dashboard-user" });
     },
-    logout() {
-      localStorage.clear();
-      window.location.href = '/login';
-    },
+    async handleLogout() {
+      const result = await logout();
+
+      if (result.success) {
+        alert(result.message);
+        window.location.href = "/login";
+      } else {
+        alert(result.message);
+      }
+    }
   },
 };
 </script>

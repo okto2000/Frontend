@@ -16,6 +16,9 @@
             :src="image"
           />
         </span>
+        <p class="ml-3 font-medium text-Gray-700 hover:text-gray-500">
+          {{ user.name }}
+        </p>
       </div>
     </a>
     <div
@@ -26,21 +29,33 @@
         block: dropdownPopoverShow,
       }"
     >
-        <button @click="logout" class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300">Logout</button>
+      <button
+        @click="handleLogout"
+        class="text-start text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-300"
+      >
+        Logout
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { createPopper } from "@popperjs/core";
+import { logout } from "@/helpers/apiService";
 
 import image from "@/assets/img/team-1-800x800.jpg";
 
 export default {
+  props: {
+    user: {
+      default:{}
+    }
+  }, 
   data() {
     return {
       dropdownPopoverShow: false,
       image: image,
+      // user: JSON.parse(localStorage.getItem('user')) || {},
     };
   },
   methods: {
@@ -55,10 +70,16 @@ export default {
         });
       }
     },
-    logout() {
-      localStorage.clear();
-      this.$router.push({ name: "login" });
-    },
+    async handleLogout() {
+      const result = await logout();
+
+      if (result.success) {
+        alert(result.message);
+        window.location.href = "/login";
+      } else {
+        alert(result.message);
+      }
+    }
   },
 };
 </script>

@@ -161,6 +161,7 @@
 <script>
 import buttonsave from "@/components/Button/Status.vue";
 import { onUpdated } from "vue";
+import axiosInstance from '@/plugins/axios';  // Pastikan untuk mengimpor instance axios Anda
 
 export default {
   components: {
@@ -169,10 +170,11 @@ export default {
   data() {
     return {
       user: {
+        id: "",
         name: "",
-        // password: "",
         alamat: "",
         telpon: "",
+        picture: ""
       },
     };
   },
@@ -186,11 +188,19 @@ export default {
         this.user = JSON.parse(storedUser);
       }
     },
-    onUpdated() {
-      localStorage.setItem("user", JSON.stringify(this.user));
-      alert("User updated successfully!");
-      console.log(this.user);
-      this.$emit("userUpdate")
+    async onUpdated() {
+      try {
+        const response = await axiosInstance.put(`/employees/${this.employee.id}`, this.employee);
+        console.log('User updated in database:', response.data.data);
+        
+        localStorage.setItem("user", JSON.stringify(this.employee));
+        alert("User updated successfully!");
+        console.log(this.employee);
+        this.$emit("userUpdate");
+      } catch (error) {
+        console.error('Error updating user in database:', error);
+        alert("Failed to update user in database.");
+      }
     },
     resetForm() {
       this.loadUser();

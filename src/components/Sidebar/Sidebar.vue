@@ -210,7 +210,7 @@
             </router-link>
           </li>
           <li class="items-center">
-            <router-link
+            <!-- <router-link
               to="/admin/admin"
               v-slot="{ href, navigate, isActive }"
             >
@@ -230,7 +230,7 @@
                 ></i>
                 Admin
               </a>
-            </router-link>
+            </router-link> -->
           </li>
         </ul>
 
