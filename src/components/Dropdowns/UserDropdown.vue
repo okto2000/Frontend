@@ -13,7 +13,7 @@
           <img
             alt="..."
             class="w-10 h-10 rounded-full ring-2 ring-gray-300 dark:ring-white-500 hover:ring-blue-300 dark:hover:ring-gray-300"
-            :src="user.picture"
+            :src="user.picture ? user.picture : 'src/assets/img/avatar.png'"
           />
         </span>
         <p class="ml-3 font-medium text-Gray-700 hover:text-gray-500">{{ user.name }}</p>
