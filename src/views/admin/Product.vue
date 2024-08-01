@@ -148,7 +148,7 @@
               {{ product.product_name }}
             </td>
             <td class="border border-slate-700">
-              {{ product.image }}
+              <img :src="product.image_url" alt="Product Image" />
             </td>
             <td class="border border-slate-700">
               {{ product.id_category }}

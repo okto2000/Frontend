@@ -270,4 +270,6 @@ export async function loginWithGoogle(token) {
       throw error.response ? error.response.data : error.message;
     }
   };
-  
+  export const getSnapToken = (order) => {
+    return axiosInstance.post('/gettoken', order);
+  };

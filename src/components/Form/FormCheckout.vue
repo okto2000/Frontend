@@ -3,10 +3,9 @@
     <main class="sm:flex mx-auto max-w-7xl px-6 lg:px-8">
       <form class="mx-auto rounded-lg shadow-xl px-4 py-16 sm:px-6 lg:px-8 w-full">
         <div class="space-y-12">
-            <h2 class="text-base font-semibold leading-7 text-gray-900">Delivery information</h2>
+          <h2 class="text-base font-semibold leading-7 text-gray-900">Delivery information</h2>
           <div class="border-b border-gray-900/10 pb-12">
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
               <div class="col-span-full">
                 <div class="mt-2">
                   <input
@@ -15,14 +14,14 @@
                     id="street-address"
                     autocomplete="street-address"
                     placeholder="Street address"
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" v-model="user.alamat"
+                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    v-model="user.alamat"
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-
         <div class="mt-6 flex items-center justify-end gap-x-6">
           <button 
             type="button"
@@ -30,10 +29,10 @@
           >
             Cancel
           </button>
-          <button @click="pay"
-          type="button"
-          class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-100 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
-           >
+          <button @click="getSnapToken"
+            type="button"
+            class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-100 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
+          >
             Checkout
           </button>
         </div>
@@ -41,36 +40,66 @@
     </main>
   </div>
 </template>
+
 <script>
+import { getSnapToken } from "@/helpers/apiService";
 import buttoncheckout from "@/components/Button/Status.vue";
+
 export default {
   data() {
     return {
-      selected: {},
-      user: JSON.parse(localStorage.getItem("user")) || {},
-      user: {
-        // password: "",
+      user: JSON.parse(localStorage.getItem("user")) || {
         telepon: "",
         alamat: "",
       },
+      products: JSON.parse(localStorage.getItem("cart")) || [],
     }
   },
-  components:{
+  components: {
     buttoncheckout
   },
   created() {
     this.loadUser();
   },
-  methods:{
+  computed: {
+    totalPrice() {
+      return this.products.reduce((total, product) => {
+        return total + (product.price * product.quantity);
+      }, 0);
+    },
+  },
+  methods: {
     loadUser() {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         this.user = JSON.parse(storedUser);
       }
     },
-    pay(){
-      snap.pay('d56646fa-3c67-44da-bcd1-43f56cc7c6dc');
+    async getSnapToken() {
+      try {
+        const order = {
+          number: '1', 
+          total_price: this.totalPrice,
+          items: this.products.map(product => ({
+            id: product.id,
+            price: product.price,
+            quantity: product.quantity,
+            name: product.name,
+          })),
+          customer: {
+            first_name: this.user.first_name,
+            email: this.user.email,
+            phone: this.user.telepon,
+          }
+        };
+        console.log("Order Data: ", order); // Log untuk verifikasi data order
+        const response = await getSnapToken(order);
+        const token = response.data.token;
+        snap.pay(token);
+      } catch (error) {
+        console.error('Error fetching token:', error);
+      }
     }
   }
-  }
+}
 </script>
