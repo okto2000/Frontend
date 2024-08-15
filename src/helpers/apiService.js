@@ -1,7 +1,7 @@
-import axiosInstance from '@/plugins/axios';
+import axiosInstance from "@/plugins/axios";
 
 //Employees
-export const getEmployees = (page = 1, perPage = 10, searchQuery = '') => {
+export const getEmployees = (page = 1, perPage = 10, searchQuery = "") => {
   return axiosInstance.get(`/employees`, {
     params: {
       page,
@@ -11,7 +11,7 @@ export const getEmployees = (page = 1, perPage = 10, searchQuery = '') => {
   });
 };
 export const createEmployee = (employeeData) => {
-  return axiosInstance.post('/employees', employeeData);
+  return axiosInstance.post("/employees", employeeData);
 };
 
 export const updateEmployee = (id, updatedData) => {
@@ -38,13 +38,13 @@ export const fetchEmployeesData = async (page, perPage, searchQuery) => {
       },
     };
   } catch (error) {
-    console.error('Error fetching employees:', error);
+    console.error("Error fetching employees:", error);
     throw error;
   }
 };
 
 //Categorie
-export const getCategories = (page = 1, perPage = 10, searchQuery = '') => {
+export const getCategories = (page = 1, perPage = 10, searchQuery = "") => {
   return axiosInstance.get(`/categories`, {
     params: {
       page,
@@ -54,7 +54,7 @@ export const getCategories = (page = 1, perPage = 10, searchQuery = '') => {
   });
 };
 export const createCategorie = (categorieData) => {
-  return axiosInstance.post('/categories', categorieData);
+  return axiosInstance.post("/categories", categorieData);
 };
 
 export const updateCategorie = (id, updatedData) => {
@@ -81,13 +81,13 @@ export const fetchCategoriesData = async (page, perPage, searchQuery) => {
       },
     };
   } catch (error) {
-    console.error('Error fetching employees:', error);
+    console.error("Error fetching employees:", error);
     throw error;
   }
 };
 
 //Products
-export const getProducts = (page = 1, perPage = 10, searchQuery = '') => {
+export const getProducts = (page = 1, perPage = 10, searchQuery = "") => {
   return axiosInstance.get(`/products`, {
     params: {
       page,
@@ -96,12 +96,16 @@ export const getProducts = (page = 1, perPage = 10, searchQuery = '') => {
     },
   });
 };
-export const createProduct = (productData) => {
-  return axiosInstance.post('/products', productData);
+export const createProduct = (formData) => {
+  return axiosInstance.post("/products", formData);
 };
 
-export const updateProduct = (id, updatedData) => {
-  return axiosInstance.put(`/products/${id}`, updatedData);
+export const updateProduct = (id, formData) => {
+  return axiosInstance.put(`/products/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 export const deleteProduct = (id) => {
@@ -124,13 +128,13 @@ export const fetchProductsData = async (page, perPage, searchQuery) => {
       },
     };
   } catch (error) {
-    console.error('Error fetching employees:', error);
+    console.error("Error fetching employees:", error);
     throw error;
   }
 };
 
 //Customers
-export const getCustomers = (page = 1, perPage = 10, searchQuery = '') => {
+export const getCustomers = (page = 1, perPage = 10, searchQuery = "") => {
   return axiosInstance.get(`/customers`, {
     params: {
       page,
@@ -156,7 +160,7 @@ export const fetchCustomersData = async (page, perPage, searchQuery) => {
       },
     };
   } catch (error) {
-    console.error('Error fetching customers:', error);
+    console.error("Error fetching customers:", error);
     throw error;
   }
 };
@@ -179,11 +183,11 @@ export const fetchTransactionsData = async (page, perPage, searchQuery) => {
       },
     };
   } catch (error) {
-    console.error('Error fetching customers:', error);
+    console.error("Error fetching customers:", error);
     throw error;
   }
 };
-export const getTransactions = (page = 1, perPage = 10, searchQuery = '') => {
+export const getTransactions = (page = 1, perPage = 10, searchQuery = "") => {
   return axiosInstance.get(`/transactions`, {
     params: {
       page,
@@ -191,6 +195,9 @@ export const getTransactions = (page = 1, perPage = 10, searchQuery = '') => {
       search: searchQuery,
     },
   });
+};
+export const getTransactionsDetails = () => {
+  return axiosInstance.get(`/transaction/details`);
 };
 
 export const createTransaction = (transactionData) => {
@@ -205,71 +212,77 @@ export const deleteTransaction = (id) => {
   return axiosInstance.delete(`/transactions/${id}`);
 };
 
+//Stats
+export const getStats = () => {
+  return axiosInstance.get(`/stats`);
+};
 //Login
 export async function login(endpoint, email, password) {
   try {
     const response = await axiosInstance.post(endpoint, {
       email,
-      password
+      password,
     });
 
     const token = response.data.token;
-    console.log('Token diterima:', token);
+    console.log("Token diterima:", token);
 
     // Simpan token di localStorage
-    localStorage.setItem('auth_token', token);
+    localStorage.setItem("auth_token", token);
 
     // Set header Authorization default di Axios
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     // Log seluruh respons untuk memeriksa strukturnya
-    console.log('Respons lengkap:', response);
+    console.log("Respons lengkap:", response);
 
     return response.data;
   } catch (error) {
-    console.error('Login gagal:', error.response.data);
+    console.error("Login gagal:", error.response.data);
     throw error;
   }
-};
+}
 
 export async function logout() {
   try {
-    await axiosInstance.post('/logout');
-    
-    // Hapus token dari localStorage
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
+    await axiosInstance.post("/logout");
 
-    return { success: true, message: 'Successfully logged out' };
+    // Hapus token dari localStorage
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
+
+    return { success: true, message: "Successfully logged out" };
   } catch (error) {
-    console.error('Error during logout:', error);
-    return { success: false, message: 'Logout failed. Please try again.' };
+    console.error("Error during logout:", error);
+    return { success: false, message: "Logout failed. Please try again." };
   }
 }
 export async function loginWithGoogle(token) {
   try {
-    const response = await axiosInstance.post('/login/google', { token });
-    
+    const response = await axiosInstance.post("/login/google", { token });
+
     const { token: authToken, user } = response.data;
 
     // Set default header Authorization di Axios
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
+    axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${authToken}`;
 
     return { token: authToken, user };
   } catch (error) {
-    console.error('Google login failed:', error);
+    console.error("Google login failed:", error);
     throw error;
   }
 }
-  
-  export const loginCustomer = async (credentials) => {
-    try {
-      const response = await axiosInstance.post('/login/customer', credentials);
-      return response.data;
-    } catch (error) {
-      throw error.response ? error.response.data : error.message;
-    }
-  };
-  export const getSnapToken = (order) => {
-    return axiosInstance.post('/gettoken', order);
-  };
+
+export const loginCustomer = async (credentials) => {
+  try {
+    const response = await axiosInstance.post("/login/customer", credentials);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error.message;
+  }
+};
+export const getSnapToken = (order) => {
+  return axiosInstance.post("/gettoken", order);
+};

@@ -1,9 +1,13 @@
 <template>
   <div>
     <main class="sm:flex mx-auto max-w-7xl px-6 lg:px-8">
-      <form class="mx-auto rounded-lg shadow-xl px-4 py-16 sm:px-6 lg:px-8 w-full">
+      <form
+        class="mx-auto rounded-lg shadow-xl px-4 py-16 sm:px-6 lg:px-8 w-full"
+      >
         <div class="space-y-12">
-          <h2 class="text-base font-semibold leading-7 text-gray-900">Delivery information</h2>
+          <h2 class="text-base font-semibold leading-7 text-gray-900">
+            Delivery information
+          </h2>
           <div class="border-b border-gray-900/10 pb-12">
             <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div class="col-span-full">
@@ -23,13 +27,14 @@
           </div>
         </div>
         <div class="mt-6 flex items-center justify-end gap-x-6">
-          <button 
+          <button
             type="button"
             class="text-sm font-semibold leading-6 text-gray-900"
           >
             Cancel
           </button>
-          <button @click="getSnapToken"
+          <button
+            @click="getSnapToken"
             type="button"
             class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-100 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
           >
@@ -53,10 +58,10 @@ export default {
         alamat: "",
       },
       products: JSON.parse(localStorage.getItem("cart")) || [],
-    }
+    };
   },
   components: {
-    buttoncheckout
+    buttoncheckout,
   },
   created() {
     this.loadUser();
@@ -64,7 +69,7 @@ export default {
   computed: {
     totalPrice() {
       return this.products.reduce((total, product) => {
-        return total + (product.price * product.quantity);
+        return total + product.price * product.quantity;
       }, 0);
     },
   },
@@ -78,28 +83,29 @@ export default {
     async getSnapToken() {
       try {
         const order = {
-          number: '1', 
-          total_price: this.totalPrice,
-          items: this.products.map(product => ({
+          order_id: this.user.id + Date.now(),
+          gross_amount: this.totalPrice,
+          items: this.products.map((product) => ({
             id: product.id,
             price: product.price,
             quantity: product.quantity,
-            name: product.name,
+            name: product.product_name,
           })),
-          customer: {
-            first_name: this.user.first_name,
-            email: this.user.email,
-            phone: this.user.telepon,
-          }
+          id_customer: this.user.id, // Pastikan field ini ada
+          name: this.user.name, // Pastikan field ini ada
+          email: this.user.email, // Pastikan field ini ada
+          phone: this.user.notelp, // Pastikan field ini ada
+          address: this.user.address, // Pastikan field ini ada
         };
-        console.log("Order Data: ", order); // Log untuk verifikasi data order
+        console.log("Order Data: ", order);
         const response = await getSnapToken(order);
         const token = response.data.token;
+        localStorage.setItem("snapToken", token);
         snap.pay(token);
       } catch (error) {
-        console.error('Error fetching token:', error);
+        console.error("Error fetching token:", error);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

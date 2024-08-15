@@ -4,7 +4,7 @@
     <button
       type="button"
       @click="openModal"
-      class="mb-2 text-sm font-semibold bg-blue-500  text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer "
+      class="mb-2 text-sm font-semibold bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
     >
       Tambah Employee
     </button>
@@ -81,42 +81,43 @@
         </div>
       </Dialog>
     </TransitionRoot>
-    <div class="mb-12">
-      <table
-        class="border-spacing-4 border border-slate-500 w-full text-center"
-      >
-        <thead>
-          <tr class="border border-slate-600">
-            <th class="border border-slate-600">Id</th>
-            <th class="border border-slate-600">Categorie Name</th>
-            <th class="border border-slate-600">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="categorie in categories" :key="categorie.id">
-            <td class="border border-slate-700">
-              {{ categorie.id }}
-            </td>
-            <td class="border border-slate-700">
-              {{ categorie.category_name }}
-            </td>
-            <td class="space-x-2 border border-slate-700">
-              <button
-                @click="onEdit(categorie)"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-              >
-                Edit
-              </button>
-              <button
-                @click="onDelete(categorie.id)"
-                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="flex justify-between mb-4">
+      <div>
+        <label for="perPage">Display </label>
+        <select
+          class="rounded-lg text-sm px-2 py-1"
+          id="perPage"
+          v-model="perPage"
+          @change="fetchCustomers(currentPage)"
+        >
+          <option
+            v-for="option in perPageOptions"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+        <label for="perPage"> results:</label>
+      </div>
+      <SearchInput
+        v-model="searchQuery"
+        @search="fetchCustomers(currentPage)"
+      />
+    </div>
+    <div>
+      <DataTable
+        :items="categories"
+        :headers="['No', 'Name', 'aksi']"
+        :keys="['category_name']"
+        @edit="onEdit"
+        @delete="onDelete"
+      />
+      <Pagination
+        :pagination="pagination"
+        :currentPage="currentPage"
+        @page-change="fetchCustomers"
+      />
     </div>
   </div>
 </template>
@@ -127,7 +128,9 @@ import {
   updateCategorie,
   deleteCategorie,
 } from "@/helpers/apiService";
-import PageButton from "@/components/Button/Pagination.vue";
+import DataTable from "@/components/Table/DataTable.vue";
+import Pagination from "@/components/Table/Pagination.vue";
+import SearchInput from "@/components/Table/SearchInput.vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -138,7 +141,9 @@ import {
 
 export default {
   components: {
-    PageButton,
+    DataTable,
+    Pagination,
+    SearchInput,
     TransitionRoot,
     TransitionChild,
     Dialog,
@@ -201,8 +206,10 @@ export default {
       }
     },
     saveCategorie() {
+      console.log(this.newCategorie);
       if (this.isEditMode && this.currentCategorie) {
         this.updateCategorie(this.currentCategorie.id, this.newCategorie);
+        this.isOpen = false;
       } else {
         this.createCategorie();
       }
@@ -250,6 +257,7 @@ export default {
       this.newCategorie = {
         category_name: categorie.category_name,
       };
+      this.isOpen = true;
       this.isEditMode = true;
     },
     resetNewCategorieForm() {

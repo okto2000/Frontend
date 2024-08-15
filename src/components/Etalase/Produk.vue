@@ -6,40 +6,38 @@
     <div
       class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
     >
-      <div v-for="product in products" :key="product.id" class="group lg:shadow-lg">
+      <div
+        v-for="product in products"
+        :key="product.id"
+        class="group lg:shadow-lg"
+      >
         <div
           class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
           <img
             class="p-8 rounded-t-lg"
-            :src="product.imageSrc"
-            :alt="product.imageAlt"
-            alt="product image"
+            :src="product.image"
+            :alt="product.name"
           />
           <div class="px-5 pb-5">
             <h5
               class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
             >
-              {{ product.name }}
+              {{ product.product_name }}
             </h5>
             <div class="flex items-center mt-2.5 mb-5">
               <div
                 class="flex items-center space-x-1 rtl:space-x-reverse"
               ></div>
-              <span
-                class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"
-                >{{ product.tipe }}</span
-              >
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-1xl font-bold text-gray-900 dark:text-white">{{
-                product.price.toLocaleString('id-ID',{ style: 'currency', currency: 'IDR' })
+              <span class="text-1xl font-bold bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded">{{
+                product.price.toLocaleString("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                })
               }}</span>
-              <Buttoncart
-                @click="addToCart(product)"
-              >
-                Add to cart
-              </Buttoncart>
+              <Buttoncart @click="addToCart(product)"> Add to cart </Buttoncart>
             </div>
           </div>
         </div>
@@ -50,10 +48,10 @@
 
 <script>
 import Buttoncart from "@/components/Button/AddCart.vue";
-
+import { fetchProductsData } from "@/helpers/apiService";
 export default {
   components: {
-    Buttoncart
+    Buttoncart,
   },
   data() {
     return {
@@ -61,21 +59,17 @@ export default {
     };
   },
   created() {
-    for (let index = 0; index < 8; index++) {
-      this.products.push({
-        id: index,
-        name: "Produk " + index,
-        imageSrc: "src/assets/img/pngwing.png",
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: 35000,
-        tipe: index % 2 == 0 ? "Pelayanan" : "Barang",
-      });
-    }
+    this.fetchProducts(this.products);
   },
   methods: {
-    // slicedProducts() {
-    //   return this.products.slice((product) => product.tipe === "Barang");
-    // },
+    async fetchProducts() {
+      try {
+        const { products } = await fetchProductsData();
+        this.products = products;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
     isExists(id) {
       var isexists = false;
       var index = null;
@@ -99,7 +93,7 @@ export default {
       var carts = JSON.parse(localStorage.getItem("cart"));
       var status = this.isExists(obj.id);
       if (status.status == true) {
-        console.log("EXISTS", carts[status.data],carts);
+        console.log("EXISTS", carts[status.data], carts);
         carts[status.data].quantity++;
       } else {
         carts.push({ ...obj, quantity: 1 });

@@ -21,6 +21,8 @@
       </TransitionChild>
       <div class="fixed inset-0 overflow-y-auto">
         <div
+          v-for="transaction in transactions"
+          :key="transaction.id"
           class="flex min-h-full items-center justify-center p-4 text-center"
         >
           <TransitionChild
@@ -39,7 +41,7 @@
                 <h3 class="text-lg font-bold">Detail Transaksi</h3>
                 <button
                   type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  class="inline-flex justify-center rounded-md btransaction btransaction-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                   @click="closeModal"
                 >
                   X
@@ -50,52 +52,48 @@
                 class="text-lg font-medium leading-6 text-gray-900"
               >
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                  <h3 class="py-3">Pesanan Selesai</h3>
-                  <div
-                    class="flex justify-between font-normal text-sm py-2"
-                  >
+                  <h3 class="py-3">Pesanan {{ transaction.status }}</h3>
+                  <div class="flex justify-between font-normal text-sm py-2">
                     <h3 class="text-gray-400">Tanggal Pembelian</h3>
-                    <p class="text-gray-600">11 Nov 2023</p>
+                    <p class="text-gray-600">{{transaction.transaction_date }}</p>
                   </div>
                 </div>
               </DialogTitle>
               <div class="mt-2">
                 <p class="text-md font-medium py-2">Detail Produk</p>
                 <div
-                  v-for="order in orders"
-                  :key="order.id"
-                  class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mb-2"
+                  class="p-6 bg-white btransaction btransaction-gray-200 rounded-lg shadow dark:bg-gray-800 dark:btransaction-gray-700 mb-2"
                 >
                   <div class="flex space-x-2 rounded-lg items-center p-2">
                     <img
                       class="object-cover w-full rounded-t-lg h-16 md:h-auto md:w-16 md:rounded-none md:rounded-s-lg"
-                      :src="order.imageSrc"
+                      :src="transaction.product_image"
                       alt=""
                     />
                     <div class="flex-col w-full">
                       <h5
                         class="text-md font-semibold tracking-tight text-gray-900 dark:text-white"
                       >
-                        {{ order.name }}
+                        {{ transaction.product_name }}
                       </h5>
                       <p class="text-sm font-normal text-gray-400">
-                        {{ order.tipe }}
+                        {{ transaction.product_category }}
                       </p>
                       <p class="text-sm font-normal text-gray-400">
                         {{
-                          order.price.toLocaleString("id-ID", {
+                          transaction.product_price.toLocaleString("id-ID", {
                             style: "currency",
                             currency: "IDR",
                           })
                         }}
                       </p>
                     </div>
-                    <div class="border-l-2 w-full">
+                    <div class="btransaction-l-2 w-full">
                       <div class="ml-2 text-sm font-normal text-gray-400">
                         Total Harga
                         <h3 class="text-sm font-bold text-gray-700">
                           {{
-                            order.price.toLocaleString("id-ID", {
+                            transaction.subtotal.toLocaleString("id-ID", {
                               style: "currency",
                               currency: "IDR",
                             })
@@ -108,28 +106,40 @@
               </div>
               <div>
                 <p class="text-md font-medium py-2">Detail Pengiriman</p>
-                <div class="flex justify-start space-x-4 font-normal text-sm py-2">
-                    <p class="text-sm font-normal text-gray-400">Kurir</p>
-                    <p>:</p>
-                    <p class="text-sm font-normal">JNE</p>
+                <div
+                  class="flex justify-start space-x-4 font-normal text-sm py-2"
+                >
+                  <p class="text-sm font-normal text-gray-400">Kurir</p>
+                  <p>:</p>
+                  <p class="text-sm font-normal">JNE</p>
                 </div>
-                <div class="flex justify-start space-x-4 font-normal text-sm py-2">
-                    <p class="text-sm font-normal text-gray-400">Alamat</p>
-                    <p>:</p>
-                    <p class="text-sm font-normal">Jl. Cempaka</p>
+                <div
+                  class="flex justify-start space-x-4 font-normal text-sm py-2"
+                >
+                  <p class="text-sm font-normal text-gray-400">Alamat</p>
+                  <p>:</p>
+                  <p class="text-sm font-normal">{{ transaction.address }}</p>
                 </div>
               </div>
               <div>
                 <p class="text-md font-medium py-2">Rincian Pembayaran</p>
-                <div class="flex justify-start space-x-4 font-normal text-sm py-2">
-                    <p class="text-sm font-normal text-gray-400">Metode Pembayaran</p>
-                    <p>:</p>
-                    <p class="text-sm font-normal">BCA Virtual Account</p>
+                <div
+                  class="flex justify-start space-x-4 font-normal text-sm py-2"
+                >
+                  <p class="text-sm font-normal text-gray-400">
+                    Metode Pembayaran
+                  </p>
+                  <p>:</p>
+                  <p class="text-sm font-normal">{{ transaction.payment_method }}</p>
                 </div>
-                <div class="flex justify-start space-x-4 font-normal text-sm py-2">
-                    <p class="text-sm font-normal text-gray-400">Total Harga (1 Barang)</p>
-                    <p>:</p>
-                    <p class="text-sm font-normal">Rp. 35.000</p>
+                <div
+                  class="flex justify-start space-x-4 font-normal text-sm py-2"
+                >
+                  <p class="text-sm font-normal text-gray-400">
+                    Total Harga ({{ transaction.qty }} Barang)
+                  </p>
+                  <p>:</p>
+                  <p class="text-sm font-normal">Rp. {{ transaction.subtotal }}</p>
                 </div>
               </div>
             </DialogPanel>
@@ -149,7 +159,6 @@ import {
   DialogTitle,
 } from "@headlessui/vue";
 
-
 export default {
   components: {
     TransitionRoot,
@@ -160,7 +169,7 @@ export default {
   },
   data() {
     return {
-      orders: [],
+      transactions: [],
       isOpen: false,
     };
   },
@@ -173,15 +182,17 @@ export default {
     },
   },
   created() {
-    for (let index = 0; index < 1; index++) {
-      this.orders.push({
-        id: index,
-        name: "Produk " + index,
-        imageSrc: "src/assets/img/pngwing.png",
-        price: 35000,
-        tipe: index % 2 == 0 ? "Pelayanan" : "Barang",
-      });
-    }
+    this.fetchTransaction(this.transactions);
+  },
+  methods: {
+    async fetchTransaction() {
+      try {
+        const { transactions } = await getTransactionsDetails();
+        this.transactions = transactions.data.data;
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
   },
 };
 </script>

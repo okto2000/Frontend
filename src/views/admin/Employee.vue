@@ -4,7 +4,7 @@
     <button
       type="button"
       @click="openModal"
-      class="mb-2 text-sm font-semibold bg-blue-500  text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer "
+      class="mb-2 text-sm font-semibold bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
     >
       Tambah Employee
     </button>
@@ -42,7 +42,7 @@
                   as="h3"
                   class="text-lg font-medium leading-6 text-gray-900 flex flex-row justify-between mb-4"
                 >
-                {{ isEditMode ? "Edit Employee" : "Tambah Employee" }}
+                  {{ isEditMode ? "Edit Employee" : "Tambah Employee" }}
 
                   <button
                     type="button"
@@ -53,7 +53,7 @@
                   </button>
                 </DialogTitle>
                 <form @submit.prevent="saveEmployee" class="space-x-2">
-                    <div class="flex flex-col justify-between">
+                  <div class="flex flex-col justify-between">
                     <input
                       v-model="newEmployee.name"
                       type="text"
@@ -75,12 +75,14 @@
                     <input
                       v-model="newEmployee.salary"
                       type="text"
-                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring" placeholder="Gaji"
+                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                      placeholder="Gaji"
                     />
                     <input
                       v-model="newEmployee.email"
                       type="email"
-                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring" placeholder="Email"
+                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                      placeholder="Email"
                     />
                     <select
                       v-model="newEmployee.status"
@@ -95,14 +97,15 @@
                     >
                       <option value="admin">Admin</option>
                       <option value="packing">Packing</option>
-                      <option value="packing">HHH</option>
+                      <option value="purchasing">Purchasing</option>
                     </select>
                     <input
                       v-if="!isEditMode"
                       v-model="newEmployee.password"
                       type="password"
                       class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
-                      required placeholder="Password"
+                      required
+                      placeholder="Password"
                     />
                     <div class="flex flex-row space-x-2">
                       <button
@@ -119,7 +122,7 @@
                       </button>
                     </div>
                   </div>
-                  </form>
+                </form>
               </DialogPanel>
             </TransitionChild>
           </div>
@@ -127,122 +130,48 @@
       </Dialog>
     </TransitionRoot>
     <div class="flex justify-between mb-4">
-      <div>
-        <label for="perPage">Display </label>
-        <select
-          class="rounded-lg text-sm px-2 py-1"
-          id="perPage"
-          v-model="perPage"
-          @change="fetchEmployees(currentPage)"
-        >
-          <option
-            v-for="option in perPageOptions"
-            :key="option"
-            :value="option"
-          >
-            {{ option }}
-          </option>
-        </select>
-        <label for="perPage"> results:</label>
-      </div>
-      <input
-        class="rounded"
-        type="text"
+      <PerPageSelect
+        :value="perPage"
+        :options="perPageOptions"
+        @input="perPage = $event"
+        @change="fetchEmployees(currentPage)"
+      />
+      <SearchInput
         v-model="searchQuery"
-        @input="fetchEmployees(currentPage)"
-        placeholder="Search employees"
+        @search="fetchEmployees(currentPage)"
       />
     </div>
-    <div class="mb-12">
-      <table
-        class="border-spacing-4 border border-slate-500 w-full text-center"
-      >
-        <thead>
-          <tr class="border border-slate-600">
-            <th class="border border-slate-600">Id</th>
-            <th class="border border-slate-600">Name</th>
-            <th class="border border-slate-600">Address</th>
-            <th class="border border-slate-600">No Telepon</th>
-            <th class="border border-slate-600">Status</th>
-            <th class="border border-slate-600">Salary</th>
-            <th class="border border-slate-600">Email</th>
-            <th class="border border-slate-600">role</th>
-            <th class="border border-slate-600">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="employee in employees" :key="employee.id" class="text-xs">
-            <td class="border border-slate-700">
-              {{ employee.id }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.name }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.address }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.notelp }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.status }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.salary }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.email }}
-            </td>
-            <td class="border border-slate-700">
-              {{ employee.role }}
-            </td>
-            <td class="space-x-2 border border-slate-700">
-              <div class="flex">
-                <button
-                  @click="onEdit(employee)"
-                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-light rounded-lg text-xs px-2 py-0.5 text-center"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="onDelete(employee.id)"
-                  class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-light rounded-lg text-xs px-2 py-0.5 text-center"
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="flex justify-between">
-      <div class="space-x-1 items-center justify-start text-center">
-        <PageButton
-          @click="fetchEmployees(currentPage - 1)"
-          :disabled="!pagination.prev_page_url"
-          >Previous</PageButton
-        >
-        <PageButton
-          v-for="page in pagination.last_page"
-          :key="page"
-          :is-active="currentPage === page"
-          @click="fetchEmployees(page)"
-        >
-          {{ page }}
-        </PageButton>
-        <PageButton
-          @click="fetchEmployees(currentPage + 1)"
-          :disabled="!pagination.next_page_url"
-          >Next</PageButton
-        >
-      </div>
-      <div>
-        <p class="text-sm">
-          Showing {{ pagination.from }} to {{ pagination.to }} of
-          {{ pagination.total }} items
-        </p>
-      </div>
+    <div>
+      <DataTable
+        :items="employees"
+        :headers="[
+          'No',
+          'Name',
+          'address',
+          'notelp',
+          'salary',
+          'status',
+          'email',
+          'role',
+          'Aksi',
+        ]"
+        :keys="[
+          'name',
+          'address',
+          'notelp',
+          'salary',
+          'status',
+          'email',
+          'role',
+        ]"
+        @edit="onEdit"
+        @delete="onDelete"
+      />
+      <Pagination
+        :pagination="pagination"
+        :currentPage="currentPage"
+        @page-change="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -261,9 +190,16 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-
+import DataTable from "@/components/Table/DataTable.vue";
+import Pagination from "@/components/Table/Pagination.vue";
+import PerPageSelect from "@/components/Table/PerPageSelect.vue";
+import SearchInput from "@/components/Table/SearchInput.vue";
 export default {
   components: {
+    PerPageSelect,
+    SearchInput,
+    DataTable,
+    Pagination,
     PageButton,
     TransitionRoot,
     TransitionChild,
@@ -296,7 +232,6 @@ export default {
         next_page_url: null,
       },
       currentPage: 1,
-      perPage: 10,
       perPageOptions: [5, 10, 15, 20],
       searchQuery: "",
       isOpen: false,
@@ -304,11 +239,6 @@ export default {
   },
   created() {
     this.fetchEmployees(this.currentPage);
-  },
-  computed: {
-    totalPages() {
-      return Array.from({ length: this.pagination.last_page }, (_, i) => i + 1);
-    },
   },
   methods: {
     closeModal() {
@@ -333,9 +263,16 @@ export default {
         console.error("Error fetching employees:", error);
       }
     },
+    handlePageChange(page) {
+      console.log("Page Change Triggered: ", page); // Add log here
+      this.currentPage = page;
+      this.fetchEmployees(this.currentPage);
+    },
     saveEmployee() {
+      console.log(this.newEmployee);
       if (this.isEditMode && this.currentEmployee) {
         this.updateEmployee(this.currentEmployee.id, this.newEmployee);
+        this.isOpen = false;
       } else {
         this.createEmployee();
       }
@@ -387,7 +324,6 @@ export default {
         status: employee.status,
         salary: employee.salary,
         email: employee.email,
-        password: "",
         role: employee.role,
       };
       this.isOpen = true;

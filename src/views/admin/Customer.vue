@@ -20,83 +20,37 @@
         </select>
         <label for="perPage"> results:</label>
       </div>
-      <input
-        class="rounded"
-        type="text"
+      <SearchInput
         v-model="searchQuery"
-        @input="fetchCustomers(currentPage)"
-        placeholder="Search customers"
+        @search="fetchCustomers(currentPage)"
       />
     </div>
-    <table class="border-spacing-4 border border-slate-500 w-full text-center">
-      <thead>
-        <tr class="border border-slate-600">
-          <th class="border border-slate-600">Id</th>
-          <th class="border border-slate-600">Name</th>
-          <th class="border border-slate-600">Address</th>
-          <th class="border border-slate-600">No Telepon</th>
-          <th class="border border-slate-600">Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="customer in customers" :key="customer.id">
-          <td class="border border-slate-700">
-            {{ customer.id }}
-          </td>
-          <td class="border border-slate-700">
-            {{ customer.name }}
-          </td>
-          <td class="border border-slate-700">
-            {{ customer.address }}
-          </td>
-          <td class="border border-slate-700">
-            {{ customer.notelp }}
-          </td>
-          <td class="border border-slate-700">
-            {{ customer.email }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="flex justify-between mt-2">
-    <div class="space-x-1 items-center justify-start text-center">
-      <PageButton
-        @click="fetchCustomers(currentPage - 1)"
-        :disabled="!pagination.prev_page_url"
-        >Previous</PageButton
-      >
-      <PageButton
-        v-for="page in pagination.last_page"
-        :key="page"
-        :is-active="currentPage === page"
-        @click="fetchCustomers(page)"
-      >
-        {{ page }}
-      </PageButton>
-      <PageButton
-        @click="fetchCustomers(currentPage + 1)"
-        :disabled="!pagination.next_page_url"
-        >Next</PageButton
-      >
-    </div>
     <div>
-      <p class="text-sm">
-        Showing {{ pagination.from }} to {{ pagination.to }} of
-        {{ pagination.total }} items
-      </p>
+      <DataTable
+        :items="customers"
+        :headers="['No', 'Name', 'address', 'notlp', 'email']"
+        :keys="['name', 'address', 'notlp', 'email']"
+        :aksi="false"
+        :currentPage="currentPage"
+      />
+      <Pagination
+        :pagination="pagination"
+        :currentPage="currentPage"
+        @page-change="fetchCustomers"
+      />
     </div>
   </div>
 </template>
 <script>
-import {
-  fetchCustomersData,
-} from "@/helpers/apiService";
-import PageButton from '@/components/Button/Pagination.vue'
-
+import { fetchCustomersData } from "@/helpers/apiService";
+import DataTable from "@/components/Table/DataTable.vue";
+import Pagination from "@/components/Table/Pagination.vue";
+import SearchInput from "@/components/Table/SearchInput.vue";
 export default {
-  components:{
-    PageButton
+  components: {
+    DataTable,
+    Pagination,
+    SearchInput,
   },
   data() {
     return {
@@ -113,11 +67,11 @@ export default {
       currentPage: 1,
       perPage: 10,
       perPageOptions: [5, 10, 15, 20],
-      searchQuery: ""
-      };
-    },
+      searchQuery: "",
+    };
+  },
   created() {
-    this.fetchCustomers(this.currentPage)
+    this.fetchCustomers(this.currentPage);
   },
   computed: {
     totalPages() {
@@ -127,12 +81,16 @@ export default {
   methods: {
     async fetchCustomers(page) {
       try {
-        const { customers, pagination } = await fetchCustomersData(page, this.perPage, this.searchQuery);
+        const { customers, pagination } = await fetchCustomersData(
+          page,
+          this.perPage,
+          this.searchQuery
+        );
         this.customers = customers;
         this.pagination = pagination;
         this.currentPage = page;
       } catch (error) {
-        console.error('Error fetching customers:', error);
+        console.error("Error fetching customers:", error);
       }
     },
   },

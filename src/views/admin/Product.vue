@@ -4,9 +4,9 @@
     <button
       type="button"
       @click="openModal"
-      class="mb-2 text-sm font-semibold bg-blue-500  text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer "
+      class="mb-2 text-sm font-semibold bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
     >
-      Tambah Employee
+      Tambah Product
     </button>
     <TransitionRoot appear :show="isOpen" as="template">
       <Dialog as="div" @close="closeModal" class="relative z-10">
@@ -57,24 +57,27 @@
                     <input
                       v-model="newProduct.product_name"
                       type="text"
-                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring" placeholder="Product Name"
+                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                      placeholder="Product Name"
                     />
                     <input
                       @change="onFileChange"
                       type="file"
-                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring" placeholder="Image"
+                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                      placeholder="Image"
                     />
                     <select
                       v-model="newProduct.id_category"
                       class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
                     >
-                      <option value="produk">Product</option>
-                      <option value="layanan">Service</option>
+                      <option value="1">Product</option>
+                      <option value="2">Service</option>
                     </select>
                     <input
                       v-model="newProduct.price"
                       type="text"
-                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring" placeholder="Harga"
+                      class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                      placeholder="Harga"
                     />
                     <div class="flex flex-row space-x-2">
                       <button
@@ -99,108 +102,26 @@
       </Dialog>
     </TransitionRoot>
     <div class="flex justify-between mb-4">
-      <div>
-        <label for="perPage">Display </label>
-        <select
-          class="rounded-lg text-sm px-2 py-1"
-          id="perPage"
-          v-model="perPage"
-          @change="fetchProducts(currentPage)"
-        >
-          <option
-            v-for="option in perPageOptions"
-            :key="option"
-            :value="option"
-          >
-            {{ option }}
-          </option>
-        </select>
-        <label for="perPage"> results:</label>
-      </div>
-      <input
-        class="rounded"
-        type="text"
-        v-model="searchQuery"
-        @input="fetchProducts(currentPage)"
-        placeholder="Search employees"
+      <PerPageSelect
+        :value="perPage"
+        :options="perPageOptions"
+        @input="perPage = $event"
       />
+      <SearchInput v-model="searchQuery" @search="fetchProducts(currentPage)" />
     </div>
-    <div class="mb-12">
-      <table
-        class="border-spacing-4 border border-slate-500 w-full text-center"
-      >
-        <thead>
-          <tr class="border border-slate-600">
-            <th class="border border-slate-600">Id</th>
-            <th class="border border-slate-600">Product Name</th>
-            <th class="border border-slate-600">Image</th>
-            <th class="border border-slate-600">Category</th>
-            <th class="border border-slate-600">Price</th>
-            <th class="border border-slate-600">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="product in products" :key="product.id">
-            <td class="border border-slate-700">
-              {{ product.id }}
-            </td>
-            <td class="border border-slate-700">
-              {{ product.product_name }}
-            </td>
-            <td class="border border-slate-700">
-              <img :src="product.image_url" alt="Product Image" />
-            </td>
-            <td class="border border-slate-700">
-              {{ product.id_category }}
-            </td>
-            <td class="border border-slate-700">
-              {{ product.price }}
-            </td>
-            <td class="space-x-2 border border-slate-700">
-              <button
-                @click="onEdit(product)"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-              >
-                Edit
-              </button>
-              <button
-                @click="onDelete(product.id)"
-                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="flex justify-between">
-      <div class="space-x-1 items-center justify-start text-center">
-        <PageButton
-          @click="fetchProducts(currentPage - 1)"
-          :disabled="!pagination.prev_page_url"
-          >Previous</PageButton
-        >
-        <PageButton
-          v-for="page in pagination.last_page"
-          :key="page"
-          :is-active="currentPage === page"
-          @click="fetchProducts(page)"
-        >
-          {{ page }}
-        </PageButton>
-        <PageButton
-          @click="fetchProducts(currentPage + 1)"
-          :disabled="!pagination.next_page_url"
-          >Next</PageButton
-        >
-      </div>
-      <div>
-        <p class="text-sm">
-          Showing {{ pagination.from }} to {{ pagination.to }} of
-          {{ pagination.total }} items
-        </p>
-      </div>
+    <div>
+      <DataTable
+        :items="products"
+        :headers="['No', 'Name', 'Image', 'Category', 'Price', 'Aksi']"
+        :keys="['product_name', 'image', 'id_category', 'price']"
+        @edit="onEdit"
+        @delete="onDelete"
+      />
+      <Pagination
+        :pagination="pagination"
+        :currentPage="currentPage"
+        @page-change="fetchProducts"
+      />
     </div>
   </div>
 </template>
@@ -211,7 +132,6 @@ import {
   updateProduct,
   deleteProduct,
 } from "@/helpers/apiService";
-import PageButton from "@/components/Button/Pagination.vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -219,10 +139,16 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/vue";
-
+import DataTable from "@/components/Table/DataTable.vue";
+import Pagination from "@/components/Table/Pagination.vue";
+import PerPageSelect from "@/components/Table/PerPageSelect.vue";
+import SearchInput from "@/components/Table/SearchInput.vue";
 export default {
   components: {
-    PageButton,
+    PerPageSelect,
+    SearchInput,
+    DataTable,
+    Pagination,
     TransitionRoot,
     TransitionChild,
     Dialog,
@@ -234,7 +160,7 @@ export default {
       products: [],
       newProduct: {
         product_name: "",
-        image: null,
+        image: "",
         id_category: "",
         price: "",
       },
@@ -250,7 +176,6 @@ export default {
         next_page_url: null,
       },
       currentPage: 1,
-      perPage: 10,
       perPageOptions: [5, 10, 15, 20],
       searchQuery: "",
       isOpen: false,
@@ -281,6 +206,7 @@ export default {
           this.searchQuery
         );
         this.products = products;
+        console.log(this.products);
         this.pagination = pagination;
         this.currentPage = page;
       } catch (error) {
@@ -290,13 +216,20 @@ export default {
     saveProduct() {
       if (this.isEditMode && this.currentProduct) {
         this.updateProduct(this.currentProduct.id, this.newProduct);
+        this.isOpen = false;
       } else {
         this.createProduct();
       }
     },
     async createProduct() {
       try {
-        const response = await createProduct(this.newProduct);
+        const formData = new FormData();
+        formData.append("product_name", this.newProduct.product_name);
+        formData.append("image", this.newProduct.image);
+        formData.append("id_category", this.newProduct.id_category);
+        formData.append("price", this.newProduct.price);
+
+        const response = await createProduct(formData);
         this.products.push(response.data);
         alert("Product created successfully");
         this.resetNewProductForm();
@@ -307,12 +240,20 @@ export default {
     },
     async updateProduct(id, updatedData) {
       try {
-        const { data } = await updateProduct(id, updatedData);
+        const formData = new FormData();
+        formData.append("product_name", this.newProduct.product_name || "");
+        formData.append("id_category", this.newProduct.id_category || "");
+        formData.append("price", this.newProduct.price || "");
+        if (this.newProduct.image) {
+          formData.append("image", this.newProduct.image);
+        }
+
+        const response = await updateProduct(id, formData);
         const updatedProductIndex = this.products.findIndex(
           (product) => product.id === id
         );
         if (updatedProductIndex !== -1) {
-          this.products[updatedProductIndex] = data;
+          this.products[updatedProductIndex] = response.data;
         }
         alert("Product updated successfully");
         this.fetchProducts(this.currentPage);
@@ -338,6 +279,7 @@ export default {
         id_category: product.id_category,
         price: product.price,
       };
+      this.isOpen = true;
       this.isEditMode = true;
     },
     onFileChange(e) {
