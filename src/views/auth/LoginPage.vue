@@ -132,9 +132,9 @@ export default {
 
         // Simpan data user ke localStorage
         localStorage.setItem('user', JSON.stringify(this.user));
-
         // Arahkan atau tindakan lain setelah login berhasil
-        window.location.href = "/";
+        this.$router.push('/');
+        this.$emit("updateUser");
       } catch (error) {
         this.error = 'Login gagal. Silakan periksa kredensial Anda.';
         console.error('Kesalahan saat login:', error);
@@ -148,9 +148,10 @@ export default {
       this.user = decodeCredential(response.credential);
 
       localStorage.setItem("user", JSON.stringify(this.user));
+      this.$router.push('/');
+      this.$emit("updateUser");
       // this.$router.push({name: "home"})
-      // this.$emit("userUpdate")
-      window.location.href = "/";
+      // window.location.href = "/";
     //   const credential = response.credential;
 
     //   // Mengirim credential ke backend untuk verifikasi dan pembuatan token

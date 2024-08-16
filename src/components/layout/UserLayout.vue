@@ -1,6 +1,6 @@
 <template>
-  <Navbar :userchange="userchange" />
-  <RouterView @updateUser="updateUser"/>
+  <Navbar :userchange="userchange" :cartCount="cartCount" />
+  <RouterView @updateUser="updateUser" @updateCart="updateCart" />
   <Footer />
 </template>
 <script>
@@ -11,14 +11,24 @@ export default {
   data() {
     return {
       userchange: false,
+      LoggedIn: false,
+      cartCount: 0,
     };
   },
   methods: {
     updateUser() {
-      alert("User updated successfully");
-      this.userchange=!this.userchange;
+      this.userchange = !this.userchange;
     },
-  },
+    updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        this.cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+      },
+      updateCart(newCount) {
+        this.cartCount = newCount;
+      },
+    },
+    created() {
+      this.updateCartCount();
+    },
 };
 </script>
-

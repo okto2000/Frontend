@@ -39,7 +39,7 @@ export default {
         this.stats = [
           {
             subtitle: "TOTAL MEMBERS",
-            title: data.total_members,
+            title: data.total_customers,
             description: "Since last month",
             iconName: "far fa-chart-bar",
             iconColor: "bg-red-500",

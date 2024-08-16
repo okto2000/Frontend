@@ -67,12 +67,19 @@
                       placeholder="Image"
                     />
                     <select
+                      v-if="categories.data.length > 0"
                       v-model="newProduct.id_category"
                       class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
                     >
-                      <option value="1">Product</option>
-                      <option value="2">Service</option>
+                      <option
+                        v-for="category in categories.data"
+                        :key="category.id"
+                        :value="category.id"
+                      >
+                        {{ category.category_name }}
+                      </option>
                     </select>
+
                     <input
                       v-model="newProduct.price"
                       type="text"
@@ -106,16 +113,19 @@
         :value="perPage"
         :options="perPageOptions"
         @input="perPage = $event"
+        @change="fetchProducts(currentPage)"
       />
       <SearchInput v-model="searchQuery" @search="fetchProducts(currentPage)" />
     </div>
     <div>
       <DataTable
         :items="products"
-        :headers="['No', 'Name', 'Image', 'Category', 'Price', 'Aksi']"
-        :keys="['product_name', 'image', 'id_category', 'price']"
+        :headers="headers"
+        :keys="keys"
         @edit="onEdit"
         @delete="onDelete"
+        :currentPage="currentPage"
+        :perPage="perPage"
       />
       <Pagination
         :pagination="pagination"
@@ -131,6 +141,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getCategories,
 } from "@/helpers/apiService";
 import {
   TransitionRoot,
@@ -164,6 +175,16 @@ export default {
         id_category: "",
         price: "",
       },
+      headers: [
+        { key: "id", label: "No" },
+        { key: "product_name", label: "product name" },
+        { key: "image", label: "image" },
+        { key: "id_category", label: "id category" },
+        { key: "price", label: "price" },
+        { label: "aksi" },
+      ],
+      keys: ["product_name", "image", "id_category", "price"],
+      categories: { data: [] },
       currentProduct: null,
       isEditMode: false,
       pagination: {
@@ -183,11 +204,7 @@ export default {
   },
   created() {
     this.fetchProducts(this.currentPage);
-  },
-  computed: {
-    totalPages() {
-      return Array.from({ length: this.pagination.last_page }, (_, i) => i + 1);
-    },
+    this.fetchCategories();
   },
   methods: {
     closeModal() {
@@ -197,6 +214,16 @@ export default {
       this.resetNewProductForm();
       this.isEditMode = false;
       this.isOpen = true;
+    },
+    async fetchCategories() {
+      try {
+        const categories = await getCategories();
+        this.categories = categories.data.data;
+        console.log("Fetched categories:", categories.data.data); // Debugging log
+        this.categories = categories.data.data;
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
     },
     async fetchProducts(page) {
       try {
@@ -219,6 +246,7 @@ export default {
         this.isOpen = false;
       } else {
         this.createProduct();
+        this.isOpen = false;
       }
     },
     async createProduct() {
@@ -238,7 +266,7 @@ export default {
         console.error("Error creating product:", error);
       }
     },
-    async updateProduct(id, updatedData) {
+    async updateProduct(id) {
       try {
         const formData = new FormData();
         formData.append("product_name", this.newProduct.product_name || "");
@@ -264,9 +292,14 @@ export default {
     },
     async onDelete(id) {
       try {
-        await deleteProduct(id);
-        this.products = this.products.filter((product) => product.id !== id);
-        this.fetchProducts(this.currentPage);
+        // add alert confirm
+        if (confirm("Are you sure you want to delete this product?")) {
+          await deleteProduct(id);
+          this.products = this.products.filter((product) => product.id !== id);
+          this.fetchProducts(this.currentPage);
+        } else {
+          this.fetchProducts(this.currentPage);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -275,7 +308,7 @@ export default {
       this.currentProduct = product;
       this.newProduct = {
         product_name: product.product_name,
-        image: null,
+        image: product.imageSrc,
         id_category: product.id_category,
         price: product.price,
       };

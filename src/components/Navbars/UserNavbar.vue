@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="nav" class="bg-transaparent z-50" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-transparent z-50" v-slot="{ open }">
     <div
       class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 bg-gradient-to-t from-transparent to-cyan-200 rounded-bl-full rounded-br-full"
     >
@@ -50,6 +50,11 @@
                 class="rounded-full p-0.5 h-7 w-auto hidden sm:ml-6 sm:block hover:bg-emerald-50 hover:text-black"
               />
             </a>
+            <span
+              v-if="cartCount > 0"
+              class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs"
+              >{{ cartCount }}</span
+            >
           </div>
         </div>
         <ul class="justify-end items-center flex flex-wrap list-none">
@@ -57,7 +62,7 @@
             <!-- <notification-dropdown /> -->
           </li>
           <li v-if="LoggedIn" class="inline-block relative">
-            <UserDropdown :user="user"/>
+            <UserDropdown :user="user" @updateUser="handleUserUpdate" />
           </li>
           <div v-else class="hidden sm:ml-6 sm:block">
             <a
@@ -118,14 +123,18 @@ import CartIcon from "@/components/icons/cart.vue";
 import UserDropdown from "@/components/Dropdowns/UserDropdown.vue";
 export default {
   props: {
-    userchange:{
-      default: false
+    userchange: {
+      default: false,
+    },
+    cartCount: {
+      type: Number,
+      default: 0,
     },
   },
-  watch:{
-    userchange(){
-      alert("User updated successfully");
-      this.getUser();
+  watch: {
+    userchange() {
+      // this.getUser();
+      this.checkUserLoginStatus();
     },
   },
   components: {
@@ -140,6 +149,9 @@ export default {
   data() {
     return {
       navigation: [{ name: "Home", href: "/" }],
+      cartItemCount: 0,
+      LoggedIn: false,
+      user: {},
     };
   },
   created() {
@@ -148,6 +160,30 @@ export default {
       this.user = JSON.parse(storedUser);
       this.LoggedIn = true;
     }
+    this.loadCart();
+    this.checkUserLoginStatus();
+  },
+  methods: {
+    checkUserLoginStatus() {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        this.user = JSON.parse(storedUser);
+        this.LoggedIn = true;
+      } else {
+        this.LoggedIn = false;
+      }
+    },
+    handleUserUpdate(user) {
+      this.user = user;
+      this.LoggedIn = !!user;
+    },
+    loadCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      this.cartItemCount = cart.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+    },
   },
 };
 </script>

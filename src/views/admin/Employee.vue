@@ -144,28 +144,12 @@
     <div>
       <DataTable
         :items="employees"
-        :headers="[
-          'No',
-          'Name',
-          'address',
-          'notelp',
-          'salary',
-          'status',
-          'email',
-          'role',
-          'Aksi',
-        ]"
-        :keys="[
-          'name',
-          'address',
-          'notelp',
-          'salary',
-          'status',
-          'email',
-          'role',
-        ]"
+        :headers="headers"
+        :keys="keys"
         @edit="onEdit"
         @delete="onDelete"
+        :currentPage="currentPage"
+        :perPage="perPage"
       />
       <Pagination
         :pagination="pagination"
@@ -231,6 +215,18 @@ export default {
         prev_page_url: null,
         next_page_url: null,
       },
+      headers: [
+        { key: "id", label: "No" },
+        { key: "name", label: "name" },
+        { key: "address", label: "address" },
+        { key: "notelp", label: "notelp" },
+        { key: "salary", label: "salary" },
+        { key: "status", label: "status" },
+        { key: "email", label: "email" },
+        { key: "role", label: "role" },
+        { label: "aksi" },
+      ],
+      keys: ["name", "address", "notelp", "salary", "status", "email", "role"],
       currentPage: 1,
       perPageOptions: [5, 10, 15, 20],
       searchQuery: "",
@@ -306,11 +302,15 @@ export default {
     },
     async onDelete(id) {
       try {
-        await deleteEmployee(id);
-        this.employees = this.employees.filter(
-          (employee) => employee.id !== id
-        );
-        this.fetchEmployees(this.currentPage);
+        if (confirm("Are you sure you want to delete this product?")) {
+          await deleteEmployee(id);
+          this.employees = this.employees.filter(
+            (employee) => employee.id !== id
+          );
+          this.fetchEmployees(this.currentPage);
+        } else {
+          this.fetchEmployees(this.currentPage);
+        }
       } catch (error) {
         console.error(error);
       }

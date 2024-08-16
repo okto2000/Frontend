@@ -6,7 +6,7 @@
       @click="openModal"
       class="mb-2 text-sm font-semibold bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
     >
-      Tambah Employee
+      Tambah Category
     </button>
     <TransitionRoot appear :show="isOpen" as="template">
       <Dialog as="div" @close="closeModal" class="relative z-10">
@@ -59,6 +59,7 @@
                         v-model="newCategorie.category_name"
                         type="text"
                         class="mb-12 mr-4 border-0 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring"
+                        placeholder="Nama Kategori"
                       />
                       <button
                         type="submit"
@@ -82,41 +83,31 @@
       </Dialog>
     </TransitionRoot>
     <div class="flex justify-between mb-4">
-      <div>
-        <label for="perPage">Display </label>
-        <select
-          class="rounded-lg text-sm px-2 py-1"
-          id="perPage"
-          v-model="perPage"
-          @change="fetchCustomers(currentPage)"
-        >
-          <option
-            v-for="option in perPageOptions"
-            :key="option"
-            :value="option"
-          >
-            {{ option }}
-          </option>
-        </select>
-        <label for="perPage"> results:</label>
-      </div>
+      <PerPageSelect
+        :value="perPage"
+        :options="perPageOptions"
+        @input="perPage = $event"
+        @change="fetchCategories(currentPage)"
+      />
       <SearchInput
         v-model="searchQuery"
-        @search="fetchCustomers(currentPage)"
+        @search="fetchCategories(currentPage)"
       />
     </div>
     <div>
       <DataTable
         :items="categories"
-        :headers="['No', 'Name', 'aksi']"
-        :keys="['category_name']"
+        :headers="headers"
+        :keys="keys"
         @edit="onEdit"
         @delete="onDelete"
+        :currentPage="currentPage"
+        :perPage="perPage"
       />
       <Pagination
         :pagination="pagination"
         :currentPage="currentPage"
-        @page-change="fetchCustomers"
+        @page-change="fetchCategories"
       />
     </div>
   </div>
@@ -131,6 +122,7 @@ import {
 import DataTable from "@/components/Table/DataTable.vue";
 import Pagination from "@/components/Table/Pagination.vue";
 import SearchInput from "@/components/Table/SearchInput.vue";
+import PerPageSelect from "@/components/Table/PerPageSelect.vue";
 import {
   TransitionRoot,
   TransitionChild,
@@ -144,6 +136,7 @@ export default {
     DataTable,
     Pagination,
     SearchInput,
+    PerPageSelect,
     TransitionRoot,
     TransitionChild,
     Dialog,
@@ -167,8 +160,13 @@ export default {
         prev_page_url: null,
         next_page_url: null,
       },
+      headers: [
+        { key: 'id', label: 'No' },
+        { key: 'category_name', label: 'category name' },
+        { label: 'aksi' },
+      ],
+      keys: ['category_name'],
       currentPage: 1,
-      perPage: 10,
       perPageOptions: [5, 10, 15, 20],
       searchQuery: "",
       isOpen: false,
@@ -243,11 +241,15 @@ export default {
     },
     async onDelete(id) {
       try {
+        if (confirm("Are you sure you want to delete this product?")) {
         await deleteCategorie(id);
         this.categories = this.categories.filter(
           (categorie) => categorie.id !== id
         );
         this.fetchCategories(this.currentPage);
+        } else {
+          this.fetchCategories(this.currentPage);
+        }
       } catch (error) {
         console.error(error);
       }

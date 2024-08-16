@@ -9,6 +9,13 @@ export default{
     Produk,
     Layanan,
     Testimonial
+  },
+  methods: {
+    updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+      this.$emit('updateCart', cartCount);
+    },
   }
 }
 </script>
@@ -16,7 +23,7 @@ export default{
 <template>
   <div class="container mx-auto divide-y divide-y-reverse">
     <Hero />
-    <Produk id="produk" />
+    <Produk id="produk" @addToCart="updateCartCount"/>
     <Layanan id="layanan" />
     <Testimonial />
   </div>

@@ -101,7 +101,7 @@ export const createProduct = (formData) => {
 };
 
 export const updateProduct = (id, formData) => {
-  return axiosInstance.put(`/products/${id}`, formData, {
+  return axiosInstance.post(`/products/${id}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

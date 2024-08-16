@@ -157,23 +157,26 @@ export default {
       const subtotal = product.price * product.quantity;
       return subtotal;
     },
-    increment(obj) {
-      obj.quantity++;
+    increment(product) {
+      product.quantity++;
       localStorage.setItem("cart", JSON.stringify(this.products));
+      this.updateCartCount(); // Update cart count
+      this.$emit("addToCart");
     },
-    decrement(obj) {
-      if (obj.quantity) {
-        obj.quantity--;
-        localStorage.setItem("cart", JSON.stringify(this.products));
-      if (obj.quantity < 1) {
-            const index = this.products.indexOf(obj);
-            if (index == 0) {
-                this.products.splice(index, 1);
-            }
-      }  
-      localStorage.setItem("cart", JSON.stringify(this.products));
+    decrement(product) {
+    if (product.quantity > 1) {
+      product.quantity--;
+    } else {
+      const index = this.products.indexOf(product);
+      this.products.splice(index, 1);
     }
-    },
+    localStorage.setItem("cart", JSON.stringify(this.products));
+    this.updateCartCount(); // Update cart count
+    this.$emit("addToCart");
+  },
+    updateCartCount() {
+    this.$emit('updateCart', this.products.reduce((total, product) => total + product.quantity, 0));
+  },
   },
 };
 </script>

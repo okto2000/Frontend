@@ -81,7 +81,9 @@ export default {
 
       if (result.success) {
         alert(result.message);
-        window.location.href = "/login";
+        this.$emit("updateUser", null);
+        this.$router.push('/login');
+        this.dropdownPopoverShow = false;
       } else {
         alert(result.message);
       }

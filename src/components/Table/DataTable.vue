@@ -5,11 +5,16 @@
         <tr class="bg-blue-500">
           <th
             v-for="header in headers"
-            :key="header"
+            :key="header.key"
             scope="col"
-            class="px-6 py-3"
+            class="px-6 py-3 cursor-pointer"
+            @click="sortBy(header.key)"
           >
-            {{ header }}
+            {{ header.label }}
+            <span v-if="sortKey === header.key">
+              <span v-if="sortOrder === 'asc'">▲</span>
+              <span v-else>▼</span>
+            </span>
           </th>
         </tr>
       </thead>
@@ -31,9 +36,8 @@
         </tr>
         <tr
         v-else
-          v-for="(item, index) in items"
-          :key="item.id"
-          :id="item.id"
+          v-for="(item, index) in sortedItems"
+          :key="getGlobalIndex(index)"
           class="border-b bg-gray-100 hover:bg-blue-200"
         >
           <td
@@ -81,9 +85,9 @@
 export default {
   data() {
     return {
-      currentPage: 1,
-      perPage: 10,
       isLoading: true,
+      sortKey: '', // key untuk urutan
+      sortOrder: 'asc', // 'asc' atau 'desc'
     };
   },
   props: {
@@ -93,6 +97,30 @@ export default {
     aksi: {
       Boolean,
       default: true,
+    },
+    currentPage: {
+      Number,
+      default: 1
+    },
+    perPage: {
+      type: Number,
+      default: 10,  
+    },
+  },
+  computed: {
+    sortedItems() {
+      if (!this.sortKey) {
+        return this.items;
+      }
+      return this.items.slice().sort((a, b) => {
+        let result = 0;
+        if (a[this.sortKey] < b[this.sortKey]) {
+          result = -1;
+        } else if (a[this.sortKey] > b[this.sortKey]) {
+          result = 1;
+        }
+        return this.sortOrder === 'asc' ? result : -result;
+      });
     },
   },
   methods: {
@@ -108,12 +136,21 @@ export default {
         this.isLoading = false;
       }, 2000); 
     },
+    sortBy(key) {
+      if (this.sortKey === key) {
+        this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.sortKey = key;
+        this.sortOrder = 'asc';
+      }
+    },
   },
   mounted() {
     this.fetchData();
   },
 };
 </script>
+
 <style scoped>
 .loading-dots {
   display: inline-flex;

@@ -2,24 +2,12 @@
   <div>
     <h1 class="mb-12 font-bold">Data Customer</h1>
     <div class="flex justify-between mb-4">
-      <div>
-        <label for="perPage">Display </label>
-        <select
-          class="rounded-lg text-sm px-2 py-1"
-          id="perPage"
-          v-model="perPage"
-          @change="fetchCustomers(currentPage)"
-        >
-          <option
-            v-for="option in perPageOptions"
-            :key="option"
-            :value="option"
-          >
-            {{ option }}
-          </option>
-        </select>
-        <label for="perPage"> results:</label>
-      </div>
+      <PerPageSelect
+        :value="perPage"
+        :options="perPageOptions"
+        @input="perPage = $event"
+        @change="fetchCustomers(currentPage)"
+      />
       <SearchInput
         v-model="searchQuery"
         @search="fetchCustomers(currentPage)"
@@ -28,10 +16,11 @@
     <div>
       <DataTable
         :items="customers"
-        :headers="['No', 'Name', 'address', 'notlp', 'email']"
-        :keys="['name', 'address', 'notlp', 'email']"
+        :headers="headers"
+        :keys="keys"
         :aksi="false"
         :currentPage="currentPage"
+        :perPage="perPage"
       />
       <Pagination
         :pagination="pagination"
@@ -46,11 +35,13 @@ import { fetchCustomersData } from "@/helpers/apiService";
 import DataTable from "@/components/Table/DataTable.vue";
 import Pagination from "@/components/Table/Pagination.vue";
 import SearchInput from "@/components/Table/SearchInput.vue";
+import PerPageSelect from "@/components/Table/PerPageSelect.vue";
 export default {
   components: {
     DataTable,
     Pagination,
     SearchInput,
+    PerPageSelect
   },
   data() {
     return {
@@ -64,8 +55,15 @@ export default {
         prev_page_url: null,
         next_page_url: null,
       },
+      headers: [
+        { key: 'id', label: 'No' },
+        { key: 'name', label: 'name' },
+        { key: 'address', label: 'address' },
+        { key: 'notelp', label: 'no telephon' },
+        { key: 'email', label: 'email' },
+      ],
+      keys: ['name', 'address', 'notelp', 'email'],
       currentPage: 1,
-      perPage: 10,
       perPageOptions: [5, 10, 15, 20],
       searchQuery: "",
     };

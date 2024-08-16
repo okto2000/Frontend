@@ -84,7 +84,6 @@ export default {
       try {
         const order = {
           order_id: this.user.id + Date.now(),
-          gross_amount: this.totalPrice,
           items: this.products.map((product) => ({
             id: product.id,
             price: product.price,
@@ -100,8 +99,35 @@ export default {
         console.log("Order Data: ", order);
         const response = await getSnapToken(order);
         const token = response.data.token;
-        localStorage.setItem("snapToken", token);
-        snap.pay(token);
+        snap.pay(token, {
+          onSuccess: function (result) {
+            // Transaksi berhasil, Anda bisa redirect ke halaman sukses
+            console.log("Transaction successful:", result);
+            localStorage.removeItem("cart");
+            window.location.href =
+              "/your-success-page?order_id=" + result.order_id;
+          },
+          onPending: function (result) {
+            // Transaksi pending, Anda bisa redirect ke halaman menunggu pembayaran
+            console.log("Transaction is pending:", result);
+            localStorage.removeItem("cart");
+            window.location.href =
+              "/your-pending-page?order_id=" + result.order_id;
+          },
+          onError: function (result) {
+            // Transaksi gagal, Anda bisa redirect ke halaman error
+            console.log("Transaction failed:", result);
+            localStorage.removeItem("cart");
+            window.location.href = "/your-error-page";
+          },
+          onClose: function () {
+            // Handle ketika pelanggan menutup window pembayaran tanpa menyelesaikan pembayaran
+            console.log(
+              "Customer closed the payment popup without completing the payment."
+            );
+            window.location.reload();
+          },
+        });
       } catch (error) {
         console.error("Error fetching token:", error);
       }
