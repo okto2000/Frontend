@@ -34,7 +34,7 @@
             Cancel
           </button>
           <button
-            @click="getSnapToken"
+            @click="Submit"
             type="button"
             class="px-4 py-2 rounded-lg outline outline-1 text-sky-400 hover:bg-sky-100 outline-sky-400 text-sm text-center inline-flex justify-center text-xs font-semibold"
           >
@@ -80,8 +80,13 @@ export default {
         this.user = JSON.parse(storedUser);
       }
     },
-    async getSnapToken() {
+    async Submit() {
       try {
+        console.log("before cart",localStorage.getItem("cart"));
+       
+        this.products = JSON.parse(localStorage.getItem("cart")) || []
+        console.log("product after",this.product);
+        console.log("after cart",localStorage.getItem("cart"))
         const order = {
           order_id: this.user.id + Date.now(),
           items: this.products.map((product) => ({
@@ -96,7 +101,7 @@ export default {
           phone: this.user.notelp, // Pastikan field ini ada
           address: this.user.address, // Pastikan field ini ada
         };
-        console.log("Order Data: ", order);
+        console.log("Order Data: ", this.product);
         const response = await getSnapToken(order);
         const token = response.data.token;
         snap.pay(token, {
@@ -125,7 +130,7 @@ export default {
             console.log(
               "Customer closed the payment popup without completing the payment."
             );
-            window.location.reload();
+        
           },
         });
       } catch (error) {
